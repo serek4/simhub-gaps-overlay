@@ -162,6 +162,24 @@ function driver_SwoopBestSectorDelta(offset, sectorNr) {
 }
 
 /**
+ * calculate opponent last lap sector time delta to player
+ * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} sectorNr sector number to compare
+ * @returns delta in seconds
+ */
+function driver_SwoopLastLapSectorDelta(offset, sectorNr) {
+  var driverLastLapSector = timespantoseconds(
+    driver_SwoopProp(offset, "LastLapSector" + sectorNr)
+  );
+  var playerLastLapSector = timespantoseconds(
+    $prop("DataCorePlugin.GameData.Sector" + sectorNr + "LastLapTime")
+  );
+  return driverLastLapSector === null
+    ? null
+    : playerLastLapSector - driverLastLapSector;
+}
+
+/**
  *
  * @param {number} driverRelativePosition driver position relative to player (negative = ahead, positive = behind)
  * @param {string} propName driver prop name to read
