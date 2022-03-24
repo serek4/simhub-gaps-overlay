@@ -119,66 +119,6 @@ function driver_RelativeLapNr(offset) {
   var playerLap = $prop("DataCorePlugin.GameData.CompletedLaps");
   return driverLap - playerLap;
 }
-
-/**
- * get Swoop plugin data for ahead/behind or player car
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @param {string} propName driver prop name to read
- * @returns SimHub Swoop plugin prop
- */
-function driver_SwoopProp(offset, propName) {
-  var relativePosition;
-  switch (offset) {
-    case -1:
-      relativePosition = "Ahead_";
-      break;
-    case 0:
-      relativePosition = "My";
-      break;
-    case 1:
-      relativePosition = "Behind_";
-      break;
-
-    default:
-      break;
-  }
-  return $prop("SimHubSwoopPlugin." + relativePosition + propName);
-}
-
-/**
- * calculate opponent best sector time delta to player
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @param {number} sectorNr sector number to compare
- * @returns delta in seconds
- */
-function driver_SwoopBestSectorDelta(offset, sectorNr) {
-  var driverBestSector = timespantoseconds(
-    driver_SwoopProp(offset, "BestSector" + sectorNr)
-  );
-  var playerBestSector = timespantoseconds(
-    driver_SwoopProp(0, "BestSector" + sectorNr)
-  );
-  return driverBestSector === null ? null : playerBestSector - driverBestSector;
-}
-
-/**
- * calculate opponent last lap sector time delta to player
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @param {number} sectorNr sector number to compare
- * @returns delta in seconds
- */
-function driver_SwoopLastLapSectorDelta(offset, sectorNr) {
-  var driverLastLapSector = timespantoseconds(
-    driver_SwoopProp(offset, "LastLapSector" + sectorNr)
-  );
-  var playerLastLapSector = timespantoseconds(
-    $prop("DataCorePlugin.GameData.Sector" + sectorNr + "LastLapTime")
-  );
-  return driverLastLapSector === null
-    ? null
-    : playerLastLapSector - driverLastLapSector;
-}
-
 /**
  *
  * @param {number} driverRelativePosition driver position relative to player (negative = ahead, positive = behind)
@@ -194,5 +134,193 @@ function readDriverProp(driverRelativePosition, propName) {
     (Math.abs(driverRelativePosition) - 1) +
     "_" +
     propName
+  );
+}
+
+/**
+ * SimHub Swoop Plugin functions
+ */
+
+/**
+ * get Swoop plugin data for ahead/behind or player car
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @param {string} propName driver prop name to read
+ * @returns SimHub Swoop plugin prop
+ */
+function swoop_driverProp(relativePosition, propName) {
+  var relativePositionString;
+  switch (relativePosition) {
+    case -1:
+      relativePositionString = "Ahead_";
+      break;
+    case 0:
+      relativePositionString = "My";
+      break;
+    case 1:
+      relativePositionString = "Behind_";
+      break;
+
+    default:
+      break;
+  }
+  return $prop("SimHubSwoopPlugin." + relativePositionString + propName);
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @returns {string} driver name with short first name (J. Smith)
+ */
+function swoop_driverName(relativePosition) {
+  var firstName = swoop_driverProp(relativePosition, "FirstName");
+  if (firstName !== null) {
+    firstName.slice(0, 1) + ".";
+    return firstName + " " + swoop_driverProp(relativePosition, "LastName");
+  }
+  return null;
+}
+
+/**
+ * calculate driver last lap sector time delta to player
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
+ * @param {number} sectorNr sector number to compare
+ * @returns delta in seconds
+ */
+function swoop_driverLastLapSectorDelta(relativePosition, sectorNr) {
+  var driverLastLapSector = timespantoseconds(
+    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
+  );
+  var playerLastLapSector = timespantoseconds(
+    swoop_driverProp(0, "LastLapSector" + sectorNr)
+  );
+  return driverLastLapSector === null
+    ? null
+    : playerLastLapSector - driverLastLapSector;
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @param {number} sectorNr sector number to compare
+ * @returns true or false
+ */
+function swoop_driverLastLapSectorIsBest(relativePosition, sectorNr) {
+  var driverLastLapSector = timespantoseconds(
+    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
+  );
+  if (driverLastLapSector === 0) {
+    return false;
+  }
+  var allCarsBestSector = timespantoseconds(
+    $prop("SimHubSwoopPlugin.AllCarsBestSector" + sectorNr)
+  );
+  return driverLastLapSector === allCarsBestSector ? true : false;
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @param {number} sectorNr sector number to compare
+ * @returns true or false
+ */
+function swoop_driverLastLapSectorIsPersonalBest(relativePosition, sectorNr) {
+  var driverLastLapSector = timespantoseconds(
+    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
+  );
+  if (driverLastLapSector === 0) {
+    return false;
+  }
+  var driverBestSector = timespantoseconds(
+    swoop_driverProp(relativePosition, "BestSector" + sectorNr)
+  );
+  return driverLastLapSector === driverBestSector ? true : false;
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
+ * @returns driver last lap delta to player
+ */
+function swoop_driverLastLapDelta(relativePosition) {
+  var driverLastLap = timespantoseconds(
+    swoop_driverProp(relativePosition, "LastlapTime")
+  );
+  var playerLastLap = timespantoseconds($prop("LastLapTime"));
+  return Math.min(Math.max(playerLastLap - driverLastLap, -99.9), 99.9);
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @returns driver last lap delta background color
+ */
+function swoop_driverLastLapDeltaBackground(relativePosition) {
+  var allCarsBestLapTime = timespantoseconds(
+    $prop("SimHubSwoopPlugin.AllCarsBestLap")
+  );
+  var driverLastLapTime = timespantoseconds(
+    swoop_driverProp(relativePosition, "LastlapTime")
+  );
+  if (!(driverLastLapTime === 0) && driverLastLapTime === allCarsBestLapTime) {
+    return "Purple";
+  }
+  if (swoop_driverLastLapDelta(relativePosition) < -0.1) {
+    return "Green";
+  }
+  if (swoop_driverLastLapDelta(relativePosition) > 0.1) {
+    return "Red";
+  }
+  return "White";
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
+ * @returns driver best lap delta to player
+ */
+function swoop_driverBestLapDelta(relativePosition) {
+  var driverBestLap = timespantoseconds(
+    swoop_driverProp(relativePosition, "BestlapTime")
+  );
+  var playerBestLap = timespantoseconds($prop("BestLapTime"));
+  return Math.min(Math.max(playerBestLap - driverBestLap, -99.9), 99.9);
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @returns driver best lap delta background color
+ */
+function swoop_driverBestLapDeltaBackground(relativePosition) {
+  var allCarsBestLapTime = timespantoseconds(
+    $prop("SimHubSwoopPlugin.AllCarsBestLap")
+  );
+  var driverBestLapTime = timespantoseconds(
+    swoop_driverProp(relativePosition, "BestlapTime")
+  );
+  if (driverBestLapTime !== 0 && driverBestLapTime === allCarsBestLapTime) {
+    return "Purple";
+  }
+  if (swoop_driverBestLapDelta(relativePosition) < -0.1) {
+    return "Green";
+  }
+  if (swoop_driverBestLapDelta(relativePosition) > 0.1) {
+    return "Red";
+  }
+  return "White";
+}
+
+/**
+ *
+ * @param {number} relativePosition driver position relative to player (negative = ahead, positive = behind)
+ * @returns swoop plugin leaderBoard prop
+ */
+function swoop_LeaderBoardProp(relativePosition, propName) {
+  var position = driver_Position(relativePosition);
+  if (position > 30) {
+    return null;
+  }
+  return $prop(
+    "SimHubSwoopPlugin.SWLeaderBoard.Position" + position + "." + propName
   );
 }
