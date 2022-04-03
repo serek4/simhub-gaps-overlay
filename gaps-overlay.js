@@ -317,7 +317,7 @@ function swoop_driverBestLapDeltaBackground(relativePosition) {
  */
 function swoop_LeaderBoardProp(relativePosition, propName) {
   var position = driver_Position(relativePosition);
-  if (position > 30) {
+  if (position > 40) {
     return null;
   }
   return $prop(
