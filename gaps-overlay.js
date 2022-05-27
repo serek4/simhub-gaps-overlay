@@ -194,3 +194,35 @@ function DynLeaderboardsPluginProp(leaderBoard, position, prop) {
 function secToTimeStr(sec) {
   return new Date(Math.round(sec * 10) * 100).toISOString().substr(14, 7);
 }
+
+function gapBackgroundColor(gap, defaultColor) {
+  if (gap < -0.5) {
+    return "Green";
+  }
+  if (gap < -0.1) {
+    return "GreenYellow";
+  }
+  if (gap > 0.5) {
+    return "Red";
+  }
+  if (gap > 0.1) {
+    return "OrangeRed";
+  }
+  return defaultColor;
+}
+
+function gapTextColor(gap) {
+  if (gap < -0.5) {
+    return "White";
+  }
+  if (gap < -0.1) {
+    return "Black";
+  }
+  if (gap > 0.5) {
+    return "White";
+  }
+  if (gap > 0.1) {
+    return "Black";
+  }
+  return "Black";
+}
