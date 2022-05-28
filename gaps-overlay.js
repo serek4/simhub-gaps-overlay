@@ -115,7 +115,7 @@ function driver_Gap(position) {
   var _driverGapToFocused = DynLeaderboardsPluginProp(
     "gaps",
     position,
-    "Gap.Dynamic.ToFocused"
+    "Gap.ToFocused.OnTrack"
   );
   return Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
 }
