@@ -23,7 +23,7 @@ function isDriver(position) {
  * @returns {number} driver overall position
  */
 function driver_Position(position) {
-  return DynLeaderboardsPluginProp("gaps", position, "Position.Overall");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position.Overall");
 }
 
 /**
@@ -32,7 +32,7 @@ function driver_Position(position) {
  * @returns driver car number in #999 format
  */
 function driver_CarNumber(position) {
-  return "#" + DynLeaderboardsPluginProp("gaps", position, "Car.Number");
+  return "#" + DynLeaderboardsPluginProp(leaderBoardName, position, "Car.Number");
 }
 
 /**
@@ -42,7 +42,7 @@ function driver_CarNumber(position) {
  */
 function driver_Name(position) {
   return DynLeaderboardsPluginProp(
-    "gaps",
+    leaderBoardName,
     position,
     "Driver.1.InitialPlusLastName"
   );
@@ -54,7 +54,7 @@ function driver_Name(position) {
  * @returns {time} driver best lap time in mm.ss.fff format
  */
 function driver_BestLapTime(position) {
-  return DynLeaderboardsPluginProp("gaps", position, "Laps.Best.Time");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Best.Time");
 }
 
 /**
@@ -64,7 +64,7 @@ function driver_BestLapTime(position) {
  */
 function driver_BestLapDelta(position) {
   var _driverBestLapDelta = DynLeaderboardsPluginProp(
-    "gaps",
+    leaderBoardName,
     position,
     "Laps.Best.Delta.Dynamic.ToFocusedBest"
   );
@@ -77,7 +77,7 @@ function driver_BestLapDelta(position) {
  * @returns true or false
  */
 function driver_HasBestLap(position) {
-  if (DynLeaderboardsPluginProp("gaps", position, "IsOverallBestLapCar")) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, position, "IsOverallBestLapCar")) {
     return true;
   }
   return false;
@@ -89,7 +89,7 @@ function driver_HasBestLap(position) {
  * @returns {time} driver last lap time in mm.ss.fff format
  */
 function driver_LastLapTime(position) {
-  return DynLeaderboardsPluginProp("gaps", position, "Laps.Last.Time");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Last.Time");
 }
 
 /**
@@ -99,7 +99,7 @@ function driver_LastLapTime(position) {
  */
 function driver_LastLapDelta(position) {
   var _driverLastLapDelta = DynLeaderboardsPluginProp(
-    "gaps",
+    leaderBoardName,
     position,
     "Laps.Last.Delta.Dynamic.ToFocusedLast"
   );
@@ -113,7 +113,7 @@ function driver_LastLapDelta(position) {
  */
 function driver_Gap(position) {
   var _driverGapToFocused = DynLeaderboardsPluginProp(
-    "gaps",
+    leaderBoardName,
     position,
     "Gap.ToFocused.OnTrack"
   );
@@ -126,7 +126,7 @@ function driver_Gap(position) {
  * @returns driver lap number relative to focused
  */
 function driver_RelativeLapNr(position) {
-  return DynLeaderboardsPluginProp("gaps", position, "RelativeOnTrackLapDiff");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "RelativeOnTrackLapDiff");
 }
 /**
  *
@@ -135,7 +135,7 @@ function driver_RelativeLapNr(position) {
  * @returns time in seconds
  */
 function driver_LastLapSectorTime(position, sectorNr) {
-  return DynLeaderboardsPluginProp("gaps", position, "Laps.Last.S" + sectorNr);
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Last.S" + sectorNr);
 }
 /**
  * calculate driver last lap sector time delta to focused
@@ -165,7 +165,7 @@ function driver_LastLapSectorDelta(position, sectorNr) {
  * @returns time in seconds
  */
 function driver_BestSectorTime(position, sectorNr) {
-  return DynLeaderboardsPluginProp("gaps", position, "BestS" + sectorNr);
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
 }
 /**
  *
