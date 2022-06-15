@@ -226,3 +226,8 @@ function gapTextColor(gap) {
   }
   return "Black";
 }
+
+function isPartialLeaderBoard(leaderBoard) {
+  var currentLeaderboard = $prop("DynLeaderboardsPlugin." + leaderBoard + "." + "CurrentLeaderboard");
+  return currentLeaderboard.startsWith("PartialRelative");
+}
