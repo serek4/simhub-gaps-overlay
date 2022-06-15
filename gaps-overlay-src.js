@@ -41,11 +41,7 @@ function driver_CarNumber(position) {
  * @returns {string} driver name with short first name (J. Smith)
  */
 function driver_Name(position) {
-  return DynLeaderboardsPluginProp(
-    leaderBoardName,
-    position,
-    "Driver.1.InitialPlusLastName"
-  );
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Driver.1.InitialPlusLastName");
 }
 
 /**
@@ -68,7 +64,7 @@ function driver_BestLapDelta(position) {
     position,
     "Laps.Best.Delta.Dynamic.ToFocusedBest"
   );
-  return -Math.min(Math.max(_driverBestLapDelta, -99.9), 99.9);
+  return _driverBestLapDelta === null ? null : -Math.min(Math.max(_driverBestLapDelta, -99.9), 99.9);
 }
 
 /**
@@ -103,7 +99,7 @@ function driver_LastLapDelta(position) {
     position,
     "Laps.Last.Delta.Dynamic.ToFocusedLast"
   );
-  return -Math.min(Math.max(_driverLastLapDelta, -99.9), 99.9);
+  return _driverLastLapDelta === null ? null : -Math.min(Math.max(_driverLastLapDelta, -99.9), 99.9);
 }
 
 /**
@@ -112,12 +108,8 @@ function driver_LastLapDelta(position) {
  * @returns driver current gap to focused (negative = behind, positive = ahead)
  */
 function driver_Gap(position) {
-  var _driverGapToFocused = DynLeaderboardsPluginProp(
-    leaderBoardName,
-    position,
-    "Gap.ToFocused.OnTrack"
-  );
-  return Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
+  var _driverGapToFocused = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.ToFocused.OnTrack");
+  return _driverGapToFocused === null ? null : Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
 }
 
 /**
@@ -146,17 +138,12 @@ function driver_LastLapSectorTime(position, sectorNr) {
 function driver_LastLapSectorDelta(position, sectorNr) {
   var _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
   var _playerLastLapSector = driver_LastLapSectorTime(
-    $prop(
-      "DynLeaderboardsPlugin." +
-        leaderBoardName +
-        ".FocusedPosInCurrentLeaderboard"
-    ) + 1,
+    $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
     sectorNr
   );
-  return Math.min(
-    Math.max(_playerLastLapSector - _driverLastLapSector, -99.9),
-    99.9
-  );
+  return _driverLastLapSector === null
+    ? null
+    : Math.min(Math.max(_playerLastLapSector - _driverLastLapSector, -99.9), 99.9);
 }
 /**
  *
@@ -186,9 +173,7 @@ function driver_LastSectorIsPB(position, sectorNr) {
  * @returns
  */
 function DynLeaderboardsPluginProp(leaderBoard, position, prop) {
-  return $prop(
-    "DynLeaderboardsPlugin." + leaderBoard + "." + position + "." + prop
-  );
+  return $prop("DynLeaderboardsPlugin." + leaderBoard + "." + position + "." + prop);
 }
 
 function secToTimeStr(sec) {

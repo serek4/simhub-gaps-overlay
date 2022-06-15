@@ -71,7 +71,7 @@ function nameBoxText(LBposition) {
  * best lap box functions
  */
 function bestLapBoxVisible(LBposition) {
-  if (timespantoseconds(driver_BestLapTime(LBposition)) === 0) {
+  if (driver_BestLapTime(LBposition) === null) {
     return false;
   }
   return true;
@@ -98,7 +98,10 @@ function bestLapBoxTextColor(LBposition) {
 }
 
 function bestLapBoxText(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    driver_BestLapDelta(LBposition) === null ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+  ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
   return format(driver_BestLapDelta(LBposition), "0.0", true);
@@ -108,7 +111,7 @@ function bestLapBoxText(LBposition) {
  * last lap box functions
  */
 function lastLapBoxVisible(LBposition) {
-  if (driver_LastLapDelta(LBposition) === null) {
+  if (driver_LastLapTime(LBposition) === null) {
     return false;
   }
   return true;
@@ -138,7 +141,10 @@ function lastLapBoxTextColor(LBposition) {
 }
 
 function lastLapBoxText(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    driver_LastLapDelta(LBposition) === null ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+  ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
   return format(driver_LastLapDelta(LBposition), "0.0", true);
