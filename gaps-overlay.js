@@ -6,75 +6,78 @@
 // var textFont = "Sui Generis Free";
 var textFont = "RussellSquare";
 var fontSize = 22;
+var leaderBoardName = "gaps";
 
 /**
- * check if there is driver ahead/behind
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * check if there is driver on leader board
+ * @param {number} position driver position in leader board
  * @returns true or false
  */
-function isDriver(offset) {
-  return $prop(readDriverProp(offset, "Name")) ? true : false;
+function isDriver(position) {
+  return driver_Position(position) != null ? true : false;
 }
+
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns {number} driver overall position
  */
-function driver_Position(offset) {
-  return $prop(readDriverProp(offset, "Position"));
+function driver_Position(position) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position.Overall");
 }
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns driver car number in #999 format
  */
-function driver_CarNumber(offset) {
-  return "#" + $prop(readDriverProp(offset, "CarNumber"));
+function driver_CarNumber(position) {
+  return "#" + DynLeaderboardsPluginProp(leaderBoardName, position, "Car.Number");
 }
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns {string} driver name with short first name (J. Smith)
  */
-function driver_Name(offset) {
-  let name = $prop(readDriverProp(offset, "Name"));
-  let nameArray = name.split(" ");
-  nameArray[0] = nameArray[0].slice(0, 1) + ".";
-  return nameArray.join(" ");
+function driver_Name(position) {
+  return DynLeaderboardsPluginProp(
+    leaderBoardName,
+    position,
+    "Driver.1.InitialPlusLastName"
+  );
 }
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns {time} driver best lap time in mm.ss.fff format
  */
-function driver_BestLapTime(offset) {
-  return $prop(readDriverProp(offset, "BestLapTime"));
+function driver_BestLapTime(position) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Best.Time");
 }
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @returns driver best lap delta to player
+ * @param {number} position driver position in leader board
+ * @returns driver best lap delta to focused (from focused POW: negative = slower, positive = faster)
  */
-function driver_BestLapDelta(offset) {
-  var driverBestLap = timespantoseconds(driver_BestLapTime(offset));
-  var playerBestLap = timespantoseconds($prop("BestLapTime"));
-  return Math.min(Math.max(playerBestLap - driverBestLap, -99.9), 99.9);
+function driver_BestLapDelta(position) {
+  var _driverBestLapDelta = DynLeaderboardsPluginProp(
+    leaderBoardName,
+    position,
+    "Laps.Best.Delta.Dynamic.ToFocusedBest"
+  );
+  return -Math.min(Math.max(_driverBestLapDelta, -99.9), 99.9);
 }
 
 /**
  * check if driver has session best lap time
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns true or false
  */
-function driver_HasBestLap(offset) {
-  if (
-    $prop("BestLapOpponentPosition") + 1 ===
-    $prop(readDriverProp(offset, "Position"))
-  ) {
+function driver_HasBestLap(position) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, position, "IsOverallBestLapCar")) {
     return true;
   }
   return false;
@@ -82,245 +85,144 @@ function driver_HasBestLap(offset) {
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
+ * @param {number} position driver position in leader board
  * @returns {time} driver last lap time in mm.ss.fff format
  */
-function driver_LastLapTime(offset) {
-  return $prop(readDriverProp(offset, "LastLapTime"));
+function driver_LastLapTime(position) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Last.Time");
 }
 
 /**
  *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @returns driver last lap delta to player
+ * @param {number} position driver position in leader board
+ * @returns driver last lap delta to focused (from focused POW: negative = slower, positive = faster)
  */
-function driver_LastLapDelta(offset) {
-  var driverLastLap = timespantoseconds(driver_LastLapTime(offset));
-  var playerLastLap = timespantoseconds($prop("LastLapTime"));
-  return Math.min(Math.max(playerLastLap - driverLastLap, -99.9), 99.9);
-}
-
-/**
- *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @returns driver current gap to player (negative = ahead, positive = behind)
- */
-function driver_Gap(offset) {
-  return -Math.min(Math.max($prop(readDriverProp(offset, "Gap")), -99.9), 99.9);
-}
-
-/**
- *
- * @param {number} offset driver position relative to player (negative = ahead, positive = behind)
- * @returns driver lap number relative to player
- */
-function driver_RelativeLapNr(offset) {
-  var driverLap = $prop(readDriverProp(offset, "CurrentLap"));
-  var playerLap = $prop("DataCorePlugin.GameData.CompletedLaps");
-  return driverLap - playerLap;
-}
-/**
- *
- * @param {number} driverRelativePosition driver position relative to player (negative = ahead, positive = behind)
- * @param {string} propName driver prop name to read
- * @returns prop string name
- */
-function readDriverProp(driverRelativePosition, propName) {
-  var relativePosition = driverRelativePosition > 0 ? "Behind" : "Ahead";
-  return (
-    "PersistantTrackerPlugin.Driver" +
-    relativePosition +
-    "_0" +
-    (Math.abs(driverRelativePosition) - 1) +
-    "_" +
-    propName
+function driver_LastLapDelta(position) {
+  var _driverLastLapDelta = DynLeaderboardsPluginProp(
+    leaderBoardName,
+    position,
+    "Laps.Last.Delta.Dynamic.ToFocusedLast"
   );
-}
-
-/**
- * SimHub Swoop Plugin functions
- */
-
-/**
- * get Swoop plugin data for ahead/behind or player car
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
- * @param {string} propName driver prop name to read
- * @returns SimHub Swoop plugin prop
- */
-function swoop_driverProp(relativePosition, propName) {
-  var relativePositionString;
-  switch (relativePosition) {
-    case -1:
-      relativePositionString = "Ahead_";
-      break;
-    case 0:
-      relativePositionString = "My";
-      break;
-    case 1:
-      relativePositionString = "Behind_";
-      break;
-
-    default:
-      break;
-  }
-  return $prop("SimHubSwoopPlugin." + relativePositionString + propName);
+  return -Math.min(Math.max(_driverLastLapDelta, -99.9), 99.9);
 }
 
 /**
  *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
- * @returns {string} driver name with short first name (J. Smith)
+ * @param {number} position driver position in leader board
+ * @returns driver current gap to focused (negative = behind, positive = ahead)
  */
-function swoop_driverName(relativePosition) {
-  var firstName = swoop_driverProp(relativePosition, "FirstName");
-  if (firstName !== null) {
-    firstName.slice(0, 1) + ".";
-    return firstName + " " + swoop_driverProp(relativePosition, "LastName");
-  }
-  return null;
+function driver_Gap(position) {
+  var _driverGapToFocused = DynLeaderboardsPluginProp(
+    leaderBoardName,
+    position,
+    "Gap.ToFocused.OnTrack"
+  );
+  return Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
 }
 
 /**
- * calculate driver last lap sector time delta to player
- * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
- * @param {number} sectorNr sector number to compare
+ *
+ * @param {number} position driver position in leader board
+ * @returns driver lap number relative to focused
+ */
+function driver_RelativeLapNr(position) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "RelativeOnTrackLapDiff");
+}
+/**
+ *
+ * @param {number} position driver position in leader board
+ * @param {number} sectorNr sector number
+ * @returns time in seconds
+ */
+function driver_LastLapSectorTime(position, sectorNr) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Last.S" + sectorNr);
+}
+/**
+ * calculate driver last lap sector time delta to focused
+ * @param {number} position driver position in leader board
+ * @param {number} sectorNr sector number
  * @returns delta in seconds
  */
-function swoop_driverLastLapSectorDelta(relativePosition, sectorNr) {
-  var driverLastLapSector = timespantoseconds(
-    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
+function driver_LastLapSectorDelta(position, sectorNr) {
+  var _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
+  var _playerLastLapSector = driver_LastLapSectorTime(
+    $prop(
+      "DynLeaderboardsPlugin." +
+        leaderBoardName +
+        ".FocusedPosInCurrentLeaderboard"
+    ) + 1,
+    sectorNr
   );
-  var playerLastLapSector = timespantoseconds(
-    swoop_driverProp(0, "LastLapSector" + sectorNr)
+  return Math.min(
+    Math.max(_playerLastLapSector - _driverLastLapSector, -99.9),
+    99.9
   );
-  return driverLastLapSector === null
-    ? null
-    : playerLastLapSector - driverLastLapSector;
 }
-
 /**
  *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
+ * @param {number} position driver position in leader board
+ * @param {number} sectorNr sector number to compare
+ * @returns time in seconds
+ */
+function driver_BestSectorTime(position, sectorNr) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
+}
+/**
+ *
+ * @param {number} position driver position in leader board
  * @param {number} sectorNr sector number to compare
  * @returns true or false
  */
-function swoop_driverLastLapSectorIsBest(relativePosition, sectorNr) {
-  var driverLastLapSector = timespantoseconds(
-    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
-  );
-  if (driverLastLapSector === 0) {
-    return false;
-  }
-  var allCarsBestSector = timespantoseconds(
-    $prop("SimHubSwoopPlugin.AllCarsBestSector" + sectorNr)
-  );
-  return driverLastLapSector === allCarsBestSector ? true : false;
+function driver_LastSectorIsPB(position, sectorNr) {
+  var _PB = driver_BestSectorTime(position, sectorNr);
+  var _last = driver_LastLapSectorTime(position, sectorNr);
+  return _last === _PB ? true : false;
 }
-
 /**
  *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
- * @param {number} sectorNr sector number to compare
- * @returns true or false
+ * @param {string} leaderBoard leader board name
+ * @param {number} position position in leader board
+ * @param {string} prop prop to read
+ * @returns
  */
-function swoop_driverLastLapSectorIsPersonalBest(relativePosition, sectorNr) {
-  var driverLastLapSector = timespantoseconds(
-    swoop_driverProp(relativePosition, "LastLapSector" + sectorNr)
-  );
-  if (driverLastLapSector === 0) {
-    return false;
-  }
-  var driverBestSector = timespantoseconds(
-    swoop_driverProp(relativePosition, "BestSector" + sectorNr)
-  );
-  return driverLastLapSector === driverBestSector ? true : false;
-}
-
-/**
- *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
- * @returns driver last lap delta to player
- */
-function swoop_driverLastLapDelta(relativePosition) {
-  var driverLastLap = timespantoseconds(
-    swoop_driverProp(relativePosition, "LastlapTime")
-  );
-  var playerLastLap = timespantoseconds($prop("LastLapTime"));
-  return Math.min(Math.max(playerLastLap - driverLastLap, -99.9), 99.9);
-}
-
-/**
- *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
- * @returns driver last lap delta background color
- */
-function swoop_driverLastLapDeltaBackground(relativePosition) {
-  var allCarsBestLapTime = timespantoseconds(
-    $prop("SimHubSwoopPlugin.AllCarsBestLap")
-  );
-  var driverLastLapTime = timespantoseconds(
-    swoop_driverProp(relativePosition, "LastlapTime")
-  );
-  if (!(driverLastLapTime === 0) && driverLastLapTime === allCarsBestLapTime) {
-    return "Purple";
-  }
-  if (swoop_driverLastLapDelta(relativePosition) < -0.1) {
-    return "Green";
-  }
-  if (swoop_driverLastLapDelta(relativePosition) > 0.1) {
-    return "Red";
-  }
-  return "White";
-}
-
-/**
- *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, +1 = behind)
- * @returns driver best lap delta to player
- */
-function swoop_driverBestLapDelta(relativePosition) {
-  var driverBestLap = timespantoseconds(
-    swoop_driverProp(relativePosition, "BestlapTime")
-  );
-  var playerBestLap = timespantoseconds($prop("BestLapTime"));
-  return Math.min(Math.max(playerBestLap - driverBestLap, -99.9), 99.9);
-}
-
-/**
- *
- * @param {number} relativePosition driver position relative to player (-1 = ahead, 0 = player, +1 = behind)
- * @returns driver best lap delta background color
- */
-function swoop_driverBestLapDeltaBackground(relativePosition) {
-  var allCarsBestLapTime = timespantoseconds(
-    $prop("SimHubSwoopPlugin.AllCarsBestLap")
-  );
-  var driverBestLapTime = timespantoseconds(
-    swoop_driverProp(relativePosition, "BestlapTime")
-  );
-  if (driverBestLapTime !== 0 && driverBestLapTime === allCarsBestLapTime) {
-    return "Purple";
-  }
-  if (swoop_driverBestLapDelta(relativePosition) < -0.1) {
-    return "Green";
-  }
-  if (swoop_driverBestLapDelta(relativePosition) > 0.1) {
-    return "Red";
-  }
-  return "White";
-}
-
-/**
- *
- * @param {number} relativePosition driver position relative to player (negative = ahead, positive = behind)
- * @returns swoop plugin leaderBoard prop
- */
-function swoop_LeaderBoardProp(relativePosition, propName) {
-  var position = driver_Position(relativePosition);
-  if (position > 40) {
-    return null;
-  }
+function DynLeaderboardsPluginProp(leaderBoard, position, prop) {
   return $prop(
-    "SimHubSwoopPlugin.SWLeaderBoard.Position" + position + "." + propName
+    "DynLeaderboardsPlugin." + leaderBoard + "." + position + "." + prop
   );
+}
+
+function secToTimeStr(sec) {
+  return new Date(Math.round(sec * 10) * 100).toISOString().substr(14, 7);
+}
+
+function gapBackgroundColor(gap, defaultColor) {
+  if (gap < -0.5) {
+    return "Green";
+  }
+  if (gap < -0.1) {
+    return "GreenYellow";
+  }
+  if (gap > 0.5) {
+    return "Red";
+  }
+  if (gap > 0.1) {
+    return "OrangeRed";
+  }
+  return defaultColor;
+}
+
+function gapTextColor(gap) {
+  if (gap < -0.5) {
+    return "White";
+  }
+  if (gap < -0.1) {
+    return "Black";
+  }
+  if (gap > 0.5) {
+    return "White";
+  }
+  if (gap > 0.1) {
+    return "Black";
+  }
+  return "Black";
 }
