@@ -7,6 +7,19 @@
 ![gaps-screen1-PartialRelativeOverall](images/gaps-screen1-PartialRelativeOverall.png)
 ![gaps-screen2-RelativeOnTrack](images/gaps-screen2-RelativeOnTrack.png)
 
+## background colors
+
+| delta                                                                    | times                                                                 |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| <img src="images/box-red.png" height="20px">         more than +0.5s     | <img src="images/box-purple.png" height="20px">      session best lap |
+| <img src="images/box-orangeRed.png" height="20px">   from +0.1s to +0.5s | <img src="images/box-deepSkyBlue.png" height="20px"> driver best lap  |
+| <img src="images/box-white.png" height="20px">       from +0.1s to -0.1s | <img src="images/box-white.png" height="20px">       driver last lap  |
+| <img src="images/box-greenYellow.png" height="20px"> from -0.1s to -0.5s |
+| <img src="images/box-green.png" height="20px">       less than -0.5s     |
+| <img src="images/box-black.png" height="20px">       car in pit lane*    |
+
+<sup>* only in `on track gap` box</sup>
+
 ## dependencies
 
 - [SimHub V8.0.1](https://www.simhubdash.com/download-2/)
