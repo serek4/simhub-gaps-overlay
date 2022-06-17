@@ -7,6 +7,14 @@
 ![gaps-screen1-PartialRelativeOverall](images/gaps-screen1-PartialRelativeOverall.png)
 ![gaps-screen2-RelativeOnTrack](images/gaps-screen2-RelativeOnTrack.png)
 
+## screen 1
+
+<img src="images/screen1-row.png" width ="750px">
+
+## screen 2
+
+<img src="images/screen2-row.png" width ="750px">
+
 ## background colors
 
 | delta                                                                    | times                                                                 |
