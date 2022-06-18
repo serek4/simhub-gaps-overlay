@@ -37,8 +37,9 @@
 
 ### Dynamic Leaderboards Plugin
 
-:white_check_mark: - required  
-:ballot_box_with_check: - optional
+[Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards#getting-started)
+
+go to **SimHub** -> **DynLeaderboard** side tab -> **Dynamic leaderboards** tab
 
 #### dynamic leaderboards
 - `Add new leaderboard` (or rename default one)
@@ -87,6 +88,19 @@
 - `Names`
   - :white_check_mark: InitialPlusLastName
 
-### Overlay
-- import [gaps-overlay.simhubhash](gaps-overlay.simhubhash) to simhub (double click)
-- copy [gaps-overlay-src.js](gaps-overlay-src.js) and [gaps-overlay-screen.js](gaps-overlay-screen.js) to `C:\Program Files (x86)\SimHub\JavascriptExtensions` folder
+*:white_check_mark: - required  
+*:ballot_box_with_check: - optional
+
+### overlay setup
+
+- download latest release from [here](https://github.com/serek4/simhub-gaps-overlay/releases)
+- import [gaps-overlay.simhubhash](gaps-overlay.simhubdash) to SimHub (double click)
+- copy [gaps-overlay-src.js](gaps-overlay-src.js) and [gaps-overlay-screen.js](gaps-overlay-screen.js) to  
+  `C:\Program Files (x86)\SimHub\JavascriptExtensions` folder
+
+### overlay controls
+
+- to switch between screens go to **SimHub** -> **Dash Studio** side tab -> **settings** tab and  
+  add mapping for `Show next dash screen` and/or `Show previous dash screen`
+- to switch between leader boards go to **SimHub** -> **Controls and events** side tab and  
+  add mapping for `DynLeaderboardsPlugin.gaps.NextLeaderboard` and/or `DynLeaderboardsPlugin.gaps.PreviousLeaderboard`
