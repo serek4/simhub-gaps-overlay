@@ -216,3 +216,30 @@ function isPartialLeaderBoard(leaderBoard) {
   var currentLeaderboard = $prop("DynLeaderboardsPlugin." + leaderBoard + "." + "CurrentLeaderboard");
   return currentLeaderboard.startsWith("PartialRelative");
 }
+
+function LBPosition(repeatIndex, screen) {
+  switch (screen) {
+    case 1:
+      return repeatIndex;
+    case 2:
+      if (isPartialLeaderBoard(leaderBoardName)) {
+        var focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+        switch (focusedPosition) {
+          case 1:
+          case 2:
+            return repeatIndex;
+          case 3:
+            return repeatIndex + 1;
+          case 4:
+            return repeatIndex + 2;
+        
+          default:
+            return repeatIndex + 3;
+        }
+      }
+      return repeatIndex + 2;
+
+    default:
+      return repeatIndex;
+  }
+}
