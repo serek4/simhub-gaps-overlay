@@ -1,15 +1,45 @@
 # Simhub relative leaderboard overlay
 
+## screens
+
+![gaps-screen1-RelativeOnTrack](images/gaps-screen1-RelativeOnTrack.png)
+![gaps-screen1-RelativeOverall](images/gaps-screen1-RelativeOverall.png)  
+![gaps-screen1-PartialRelativeOverall](images/gaps-screen1-PartialRelativeOverall.png)
+![gaps-screen2-RelativeOnTrack](images/gaps-screen2-RelativeOnTrack.png)
+
+## screen 1
+
+<img src="images/screen1-row.png" width ="750px">
+
+## screen 2
+
+<img src="images/screen2-row.png" width ="750px">
+
+## background colors
+
+| delta                                                                    | times                                                                 |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| <img src="images/box-red.png" height="20px">         more than +0.5s     | <img src="images/box-purple.png" height="20px">      session best lap |
+| <img src="images/box-orangeRed.png" height="20px">   from +0.1s to +0.5s | <img src="images/box-deepSkyBlue.png" height="20px"> driver best lap  |
+| <img src="images/box-white.png" height="20px">       from +0.1s to -0.1s | <img src="images/box-white.png" height="20px">       driver last lap  |
+| <img src="images/box-greenYellow.png" height="20px"> from -0.1s to -0.5s |
+| <img src="images/box-green.png" height="20px">       less than -0.5s     |
+| <img src="images/box-black.png" height="20px">       car in pit lane*    |
+
+<sup>* only in `on track gap` box</sup>
+
 ## dependencies
 
 - [SimHub V8.0.1](https://www.simhubdash.com/download-2/)
 - [SimHub ACC Dynamic Leaderboards Plugin](https://github.com/kaiusl/KLPlugins.DynLeaderboards) (tested on [v1.1.1](https://github.com/kaiusl/KLPlugins.DynLeaderboards/releases/tag/v1.1.1))
 
 ## setup
+
 ### Dynamic Leaderboards Plugin
 
-:white_check_mark: - required  
-:ballot_box_with_check: - optional
+[Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards#getting-started)
+
+go to **SimHub** -> **DynLeaderboard** side tab -> **Dynamic leaderboards** tab
 
 #### dynamic leaderboards
 - `Add new leaderboard` (or rename default one)
@@ -58,6 +88,19 @@
 - `Names`
   - :white_check_mark: InitialPlusLastName
 
-### Overlay
-- import [gaps-overlay.simhubhash](gaps-overlay.simhubhash) to simhub (double click)
-- copy [gaps-overlay-src.js](gaps-overlay-src.js) and [gaps-overlay-screen.js](gaps-overlay-screen.js) to `C:\Program Files (x86)\SimHub\JavascriptExtensions` folder
+*:white_check_mark: - required  
+*:ballot_box_with_check: - optional
+
+### overlay setup
+
+- download latest release from [here](https://github.com/serek4/simhub-gaps-overlay/releases)
+- import [gaps-overlay.simhubhash](gaps-overlay.simhubdash) to SimHub (double click)
+- copy [gaps-overlay-src.js](gaps-overlay-src.js) and [gaps-overlay-screen.js](gaps-overlay-screen.js) to  
+  `C:\Program Files (x86)\SimHub\JavascriptExtensions` folder
+
+### overlay controls
+
+- to switch between screens go to **SimHub** -> **Dash Studio** side tab -> **settings** tab and  
+  add mapping for `Show next dash screen` and/or `Show previous dash screen`
+- to switch between leader boards go to **SimHub** -> **Controls and events** side tab and  
+  add mapping for `DynLeaderboardsPlugin.gaps.NextLeaderboard` and/or `DynLeaderboardsPlugin.gaps.PreviousLeaderboard`
