@@ -108,14 +108,16 @@ function bestLapBoxTextColor(LBposition) {
 }
 
 function bestLapBoxText(LBposition) {
+  const _delta = driver_BestLapDelta(LBposition);
   if (
-    driver_BestLapDelta(LBposition) === null ||
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
     focused_BestToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
-  return format(driver_BestLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
@@ -144,14 +146,16 @@ function lastLapBoxTextColor(LBposition) {
 }
 
 function lastLapBoxText(LBposition) {
+  const _delta = driver_LastLapDelta(LBposition);
   if (
-    driver_LastLapDelta(LBposition) === null ||
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
     focused_LastToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
-  return format(driver_LastLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
