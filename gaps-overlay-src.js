@@ -136,14 +136,15 @@ function driver_LastLapSectorTime(position, sectorNr) {
  * @returns delta in seconds
  */
 function driver_LastLapSectorDelta(position, sectorNr) {
-  var _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
-  var _playerLastLapSector = driver_LastLapSectorTime(
+  const _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
+  const _focusedLastLapSector = driver_LastLapSectorTime(
     $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
     sectorNr
   );
-  return _driverLastLapSector === null
-    ? null
-    : Math.min(Math.max(_playerLastLapSector - _driverLastLapSector, -99.9), 99.9);
+  if (_driverLastLapSector === null || _focusedLastLapSector === null) {
+    return null;
+  }
+  return Math.min(Math.max(_focusedLastLapSector - _driverLastLapSector, -99.9), 99.9);
 }
 /**
  *
