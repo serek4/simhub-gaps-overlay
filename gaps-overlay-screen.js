@@ -3,6 +3,22 @@
  */
 
 /**
+ * main window functions
+ */
+function mainWindowVisible() {
+  const inMenu = $prop("TyrePressureFrontLeft") === 0;
+  if (!inMenu) {
+    return true;
+  }
+  if ($prop("GameRawData.Graphics.IsSetupMenuVisible") === 1) {
+    return false;
+  }
+  const playerCarID = $prop("DataCorePlugin.GameRawData.Graphics.PlayerCarID");
+  const focusedCarID = $prop("DataCorePlugin.GameRawData.Realtime.FocusedCarIndex");
+  return focusedCarID !== playerCarID;
+}
+
+/**
  * position box functions
  */
 function positionBoxVisible(LBposition) {
