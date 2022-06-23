@@ -110,7 +110,8 @@ function bestLapBoxTextColor(LBposition) {
 function bestLapBoxText(LBposition) {
   if (
     driver_BestLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_BestToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
@@ -145,7 +146,8 @@ function lastLapBoxTextColor(LBposition) {
 function lastLapBoxText(LBposition) {
   if (
     driver_LastLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_LastToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }

@@ -68,6 +68,15 @@ function driver_BestLapDelta(position) {
 }
 
 /**
+ *
+ * @returns focused car best lap to overall best lap delta
+ */
+function focused_BestToOverallBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Best.Delta.ToOverallBest");
+}
+
+/**
  * check if driver has session best lap time
  * @param {number} position driver position in leader board
  * @returns true or false
@@ -100,6 +109,15 @@ function driver_LastLapDelta(position) {
     "Laps.Last.Delta.Dynamic.ToFocusedLast"
   );
   return _driverLastLapDelta === null ? null : -Math.min(Math.max(_driverLastLapDelta, -99.9), 99.9);
+}
+
+/**
+ *
+ * @returns focused car last lap to overall best lap delta
+ */
+function focused_LastToOverallBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Last.Delta.ToOverallBest");
 }
 
 /**
