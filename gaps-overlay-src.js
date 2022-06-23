@@ -181,11 +181,17 @@ function secToTimeStr(sec) {
 }
 
 function gapBackgroundColor(gap, defaultColor) {
+  if (gap === null) {
+    return defaultColor;
+  }
   if (gap < -0.5) {
     return "Green";
   }
   if (gap < -0.1) {
     return "GreenYellow";
+  }
+  if (gap >= -0.1 && gap <= 0.1) {
+    return "White";
   }
   if (gap > 0.5) {
     return "Red";
@@ -196,20 +202,22 @@ function gapBackgroundColor(gap, defaultColor) {
   return defaultColor;
 }
 
-function gapTextColor(gap) {
-  if (gap < -0.5) {
-    return "White";
+function gapTextColor(gapBackgroundColor) {
+  switch (gapBackgroundColor) {
+    case "Purple":
+    case "Green":
+    case "Red":
+    case "Black":
+      return "White";
+    case "DeepSkyBlue":
+    case "GreenYellow":
+    case "OrangeRed":
+    case "White":
+      return "Black";
+
+    default:
+      return "Black";
   }
-  if (gap < -0.1) {
-    return "Black";
-  }
-  if (gap > 0.5) {
-    return "White";
-  }
-  if (gap > 0.1) {
-    return "Black";
-  }
-  return "Black";
 }
 
 function isPartialLeaderBoard(leaderBoard) {
@@ -232,7 +240,7 @@ function LBPosition(repeatIndex, screen) {
             return repeatIndex + 1;
           case 4:
             return repeatIndex + 2;
-        
+
           default:
             return repeatIndex + 3;
         }

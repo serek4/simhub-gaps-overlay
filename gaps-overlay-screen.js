@@ -104,13 +104,7 @@ function bestLapBoxBackground(LBposition) {
 }
 
 function bestLapBoxTextColor(LBposition) {
-  if (driver_HasBestLap(LBposition)) {
-    return "White";
-  }
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    return "Black";
-  }
-  return gapTextColor(driver_BestLapDelta(LBposition));
+  return gapTextColor(bestLapBoxBackground(LBposition));
 }
 
 function bestLapBoxText(LBposition) {
@@ -134,26 +128,18 @@ function lastLapBoxVisible(LBposition) {
 }
 
 function lastLapBoxBackground(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition)) {
-      return driver_HasBestLap(LBposition) ? "Purple" : "DeepSkyBlue";
-    }
-    return "White";
-  }
-  if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition) && driver_HasBestLap(LBposition)) {
+  const _lastIsPB = driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition);
+  if (_lastIsPB && driver_HasBestLap(LBposition)) {
     return "Purple";
   }
-  return gapBackgroundColor(driver_LastLapDelta(LBposition), "White");
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+    return _lastIsPB ? "DeepSkyBlue" : "White";
+  }
+  return gapBackgroundColor(driver_LastLapDelta(LBposition), _lastIsPB ? "DeepSkyBlue" : "White");
 }
 
 function lastLapBoxTextColor(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition)) {
-      return driver_HasBestLap(LBposition) ? "White" : "Black";
-    }
-    return "Black";
-  }
-  return gapTextColor(driver_LastLapDelta(LBposition));
+  return gapTextColor(lastLapBoxBackground(LBposition));
 }
 
 function lastLapBoxText(LBposition) {
@@ -184,10 +170,7 @@ function deltaBoxBackground(LBposition) {
 }
 
 function deltaBoxTextColor(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
-    return "White";
-  }
-  return gapTextColor(driver_Gap(LBposition));
+  return gapTextColor(deltaBoxBackground(LBposition));
 }
 
 function deltaBoxText(LBposition) {
@@ -210,8 +193,7 @@ function sectorBoxBackground(LBposition, sector) {
 }
 
 function sectorBoxTextColor(LBposition, sector) {
-  var sectorDelta = driver_LastLapSectorDelta(LBposition, sector);
-  return gapTextColor(sectorDelta);
+  return gapTextColor(sectorBoxBackground(LBposition, sector));
 }
 
 function sectorBoxText(LBposition, sector) {
