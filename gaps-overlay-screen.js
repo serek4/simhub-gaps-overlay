@@ -26,11 +26,26 @@ function positionBoxVisible(LBposition) {
 }
 
 function positionBoxBackground(LBposition) {
-  return driver_HasBestLap(LBposition) ? "Purple" : "White";
+  return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Class.Color");
 }
 
 function positionBoxTextColor(LBposition) {
-  return driver_HasBestLap(LBposition) ? "White" : "Black";
+  const _carClass = DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Class");
+  switch (_carClass) {
+    case "ST15":
+    case "CUP17":
+      return "Black";
+    case "GT3":
+    case "GT4":
+    case "CHL":
+    case "CUP21":
+    case "ST21":
+    case "TCX":
+      return "White";
+
+    default:
+      return "Black";
+  }
 }
 
 function positionBoxText(LBposition) {
@@ -113,7 +128,7 @@ function bestLapBoxText(LBposition) {
     _delta === null ||
     Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    focused_BestToOverallBestDelta() >= 30
+    focused_BestToBestDelta() >= 30
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
@@ -151,7 +166,7 @@ function lastLapBoxText(LBposition) {
     _delta === null ||
     Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    focused_LastToOverallBestDelta() >= 30
+    focused_LastToBestDelta() >= 30
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
@@ -216,4 +231,40 @@ function sectorBoxText(LBposition, sector) {
     return format(driver_LastLapSectorTime(LBposition, sector), "0.0", false);
   }
   return format(_delta, "0.0", true);
+}
+
+/**
+ * leaderboard labels
+ */
+function leaderboardTypeVisible() {
+  return true;
+}
+
+function leaderboardTypeBackground() {
+  return "#80000000";
+}
+
+function leaderboardTypeTextColor() {
+  return "White";
+}
+
+function leaderboardTypeText() {
+  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard");
+}
+
+function classNameVisible() {
+  return leaderboardType() == "Class";
+}
+
+function classNameBackground() {
+  return "#80000000";
+}
+
+function classNameTextColor() {
+  return "White";
+}
+
+function classNameText() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Car.Class");
 }

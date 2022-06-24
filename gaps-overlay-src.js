@@ -20,10 +20,10 @@ function isDriver(position) {
 /**
  *
  * @param {number} position driver position in leader board
- * @returns {number} driver overall position
+ * @returns {number} driver overall/class position
  */
 function driver_Position(position) {
-  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position.Overall");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position." + leaderboardType());
 }
 
 /**
@@ -69,11 +69,15 @@ function driver_BestLapDelta(position) {
 
 /**
  *
- * @returns focused car best lap to overall best lap delta
+ * @returns focused car best lap to overall/class best lap delta
  */
-function focused_BestToOverallBestDelta() {
+function focused_BestToBestDelta() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
-  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Best.Delta.ToOverallBest");
+  return DynLeaderboardsPluginProp(
+    leaderBoardName,
+    _focusedPosition,
+    "Laps.Best.Delta.To" + leaderboardType() + "Best"
+  );
 }
 
 /**
@@ -82,7 +86,7 @@ function focused_BestToOverallBestDelta() {
  * @returns true or false
  */
 function driver_HasBestLap(position) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, position, "IsOverallBestLapCar")) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, position, "Is" + leaderboardType() + "BestLapCar")) {
     return true;
   }
   return false;
@@ -113,11 +117,15 @@ function driver_LastLapDelta(position) {
 
 /**
  *
- * @returns focused car last lap to overall best lap delta
+ * @returns focused car last lap to overall/class best lap delta
  */
-function focused_LastToOverallBestDelta() {
+function focused_LastToBestDelta() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
-  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Last.Delta.ToOverallBest");
+  return DynLeaderboardsPluginProp(
+    leaderBoardName,
+    _focusedPosition,
+    "Laps.Last.Delta.To" + leaderboardType() + "Best"
+  );
 }
 
 /**
@@ -269,4 +277,12 @@ function LBPosition(repeatIndex, screen) {
     default:
       return repeatIndex;
   }
+}
+
+function leaderboardType() {
+  const _currentLeaderboard = $prop("DynLeaderboardsPlugin." + leaderBoardName + "." + "CurrentLeaderboard");
+  if (/(Partial)?RelativeClass/.test(_currentLeaderboard)) {
+    return "Class";
+  }
+  return "Overall";
 }
