@@ -112,7 +112,10 @@ function bestLapBoxBackground(LBposition) {
   if (driver_HasBestLap(LBposition)) {
     return "Purple";
   }
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
+  ) {
     return "DeepSkyBlue";
   }
   return gapBackgroundColor(driver_BestLapDelta(LBposition), "DeepSkyBlue");
@@ -125,6 +128,7 @@ function bestLapBoxTextColor(LBposition) {
 function bestLapBoxText(LBposition) {
   const _delta = driver_BestLapDelta(LBposition);
   if (
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY" ||
     _delta === null ||
     Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
@@ -139,6 +143,12 @@ function bestLapBoxText(LBposition) {
  * last lap box functions
  */
 function lastLapBoxVisible(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (driver_BestLapDelta(LBposition) === null) {
+      return false;
+    }
+    return true;
+  }
   if (driver_LastLapTime(LBposition) === null) {
     return false;
   }
@@ -146,6 +156,9 @@ function lastLapBoxVisible(LBposition) {
 }
 
 function lastLapBoxBackground(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return gapBackgroundColor(driver_BestLapDelta(LBposition), "DeepSkyBlue");
+  }
   const _lastIsPB = driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition);
   if (_lastIsPB && driver_HasBestLap(LBposition)) {
     return "Purple";
@@ -161,6 +174,9 @@ function lastLapBoxTextColor(LBposition) {
 }
 
 function lastLapBoxText(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return format(driver_BestLapDelta(LBposition), "0.0", true);
+  }
   const _delta = driver_LastLapDelta(LBposition);
   if (
     _delta === null ||
@@ -185,7 +201,10 @@ function deltaBoxCheckered(LBposition) {
 }
 
 function deltaBoxVisible(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
+  ) {
     return false;
   }
   return true;
@@ -210,15 +229,24 @@ function deltaBoxText(LBposition) {
  * sectors boxes functions
  */
 function sectorBoxVisible(LBposition, sector) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return driver_BestSectorTime(LBposition, sector) !== null;
+  }
   return driver_LastLapSectorTime(LBposition, sector) !== null;
 }
 
 function sectorBoxBackground(LBposition, sector) {
-  const _delta = driver_LastLapSectorDelta(LBposition, sector);
+  let _delta = driver_LastLapSectorDelta(LBposition, sector);
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    _delta = driver_BestSectorDelta(LBposition, sector);
+  }
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
+    if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+      return "DeepSkyBlue";
+    }
     return driver_LastSectorIsPB(LBposition, sector) ? "DeepSkyBlue" : "White";
   }
-  return gapBackgroundColor(driver_LastLapSectorDelta(LBposition, sector), "White");
+  return gapBackgroundColor(_delta, "White");
 }
 
 function sectorBoxTextColor(LBposition, sector) {
@@ -226,9 +254,14 @@ function sectorBoxTextColor(LBposition, sector) {
 }
 
 function sectorBoxText(LBposition, sector) {
-  const _delta = driver_LastLapSectorDelta(LBposition, sector);
+  let _delta = driver_LastLapSectorDelta(LBposition, sector);
+  let _time = driver_LastLapSectorTime(LBposition, sector);
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    _delta = driver_BestSectorDelta(LBposition, sector);
+    _time = driver_BestSectorTime(LBposition, sector);
+  }
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
-    return format(driver_LastLapSectorTime(LBposition, sector), "0.0", false);
+    return format(_time, "0.0", false);
   }
   return format(_delta, "0.0", true);
 }

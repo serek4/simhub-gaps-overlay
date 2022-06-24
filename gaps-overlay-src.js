@@ -182,6 +182,23 @@ function driver_BestSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
 }
 /**
+ * calculate driver best sector time delta to focused
+ * @param {number} position driver position in leader board
+ * @param {number} sectorNr sector number
+ * @returns delta in seconds
+ */
+function driver_BestSectorDelta(position, sectorNr) {
+  const _driverBestLapSector = driver_BestSectorTime(position, sectorNr);
+  const _focusedBestLapSector = driver_BestSectorTime(
+    $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
+    sectorNr
+  );
+  if (_driverBestLapSector === null || _focusedBestLapSector === null) {
+    return null;
+  }
+  return Math.min(Math.max(_focusedBestLapSector - _driverBestLapSector, -99.9), 99.9);
+}
+/**
  *
  * @param {number} position driver position in leader board
  * @param {number} sectorNr sector number to compare

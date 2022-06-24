@@ -9,11 +9,19 @@
 
 ## screen 1
 
+### race
 <img src="images/screen1-row.png" width ="750px">
+
+### qualify
+<img src="images/screen1-qualify-row.png" width ="750px">
 
 ## screen 2
 
+### race
 <img src="images/screen2-row.png" width ="750px">
+
+### qualify
+<img src="images/screen2-qualify-row.png" width ="750px">
 
 ## background colors
 
@@ -71,7 +79,7 @@ go to **SimHub** -> **DynLeaderboard** side tab -> **Dynamic leaderboards** tab
   - :white_check_mark: Laps.Last.Time
   - :white_check_mark: Laps.Last.S1/2/3
   - :white_check_mark: Laps.Best.Time
-  - :white_check_mark: Laps.Best.S1/2/3
+  - :white_check_mark: BestS1/2/3
 - `Best to best`
   - :white_check_mark: Laps.Best.Delta.ToOverallBest
   - :white_check_mark: Laps.Best.Delta.ToClassBest
