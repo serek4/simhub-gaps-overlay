@@ -25,6 +25,7 @@
 | <img src="images/box-greenYellow.png" height="20px"> from -0.1s to -0.5s |
 | <img src="images/box-green.png" height="20px">       less than -0.5s     |
 | <img src="images/box-black.png" height="20px">       car in pit lane*    |
+| <img src="images/box-checkered.png" height="20px">       car finished*       |
 
 <sup>* only in `on track gap` box</sup>
 
@@ -83,6 +84,7 @@ go to **SimHub** -> **DynLeaderboard** side tab -> **Dynamic leaderboards** tab
 - `Pit information`
   - :white_check_mark: Pit.IsIn
 - `Other`
+  - :white_check_mark: IsFinished
   - :white_check_mark: IsFocused
   - :white_check_mark: IsOverallBestLapCar
   - :white_check_mark: RelativeOnTrackLapDiff

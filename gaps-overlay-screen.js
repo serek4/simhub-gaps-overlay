@@ -161,6 +161,14 @@ function lastLapBoxText(LBposition) {
 /**
  * delta box functions
  */
+
+function deltaBoxCheckered(LBposition) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFinished") === 1) {
+    return true;
+  }
+  return false;
+}
+
 function deltaBoxVisible(LBposition) {
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
     return false;
