@@ -108,13 +108,16 @@ function bestLapBoxTextColor(LBposition) {
 }
 
 function bestLapBoxText(LBposition) {
+  const _delta = driver_BestLapDelta(LBposition);
   if (
-    driver_BestLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_BestToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
-  return format(driver_BestLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
@@ -143,13 +146,16 @@ function lastLapBoxTextColor(LBposition) {
 }
 
 function lastLapBoxText(LBposition) {
+  const _delta = driver_LastLapDelta(LBposition);
   if (
-    driver_LastLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_LastToOverallBestDelta() >= 30
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
-  return format(driver_LastLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
@@ -185,11 +191,11 @@ function sectorBoxVisible(LBposition, sector) {
 }
 
 function sectorBoxBackground(LBposition, sector) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  const _delta = driver_LastLapSectorDelta(LBposition, sector);
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
     return driver_LastSectorIsPB(LBposition, sector) ? "DeepSkyBlue" : "White";
   }
-  var sectorDelta = driver_LastLapSectorDelta(LBposition, sector);
-  return gapBackgroundColor(sectorDelta, "White");
+  return gapBackgroundColor(driver_LastLapSectorDelta(LBposition, sector), "White");
 }
 
 function sectorBoxTextColor(LBposition, sector) {
@@ -197,8 +203,9 @@ function sectorBoxTextColor(LBposition, sector) {
 }
 
 function sectorBoxText(LBposition, sector) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  const _delta = driver_LastLapSectorDelta(LBposition, sector);
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
     return format(driver_LastLapSectorTime(LBposition, sector), "0.0", false);
   }
-  return format(driver_LastLapSectorDelta(LBposition, sector), "0.0", true);
+  return format(_delta, "0.0", true);
 }

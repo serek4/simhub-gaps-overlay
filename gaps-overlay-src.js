@@ -68,6 +68,15 @@ function driver_BestLapDelta(position) {
 }
 
 /**
+ *
+ * @returns focused car best lap to overall best lap delta
+ */
+function focused_BestToOverallBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Best.Delta.ToOverallBest");
+}
+
+/**
  * check if driver has session best lap time
  * @param {number} position driver position in leader board
  * @returns true or false
@@ -104,6 +113,15 @@ function driver_LastLapDelta(position) {
 
 /**
  *
+ * @returns focused car last lap to overall best lap delta
+ */
+function focused_LastToOverallBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Last.Delta.ToOverallBest");
+}
+
+/**
+ *
  * @param {number} position driver position in leader board
  * @returns driver current gap to focused (negative = behind, positive = ahead)
  */
@@ -136,14 +154,15 @@ function driver_LastLapSectorTime(position, sectorNr) {
  * @returns delta in seconds
  */
 function driver_LastLapSectorDelta(position, sectorNr) {
-  var _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
-  var _playerLastLapSector = driver_LastLapSectorTime(
+  const _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
+  const _focusedLastLapSector = driver_LastLapSectorTime(
     $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
     sectorNr
   );
-  return _driverLastLapSector === null
-    ? null
-    : Math.min(Math.max(_playerLastLapSector - _driverLastLapSector, -99.9), 99.9);
+  if (_driverLastLapSector === null || _focusedLastLapSector === null) {
+    return null;
+  }
+  return Math.min(Math.max(_focusedLastLapSector - _driverLastLapSector, -99.9), 99.9);
 }
 /**
  *
