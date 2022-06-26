@@ -69,15 +69,11 @@ function driver_BestLapDelta(position) {
 
 /**
  *
- * @returns focused car best lap to overall/class best lap delta
+ * @returns focused car best lap to class best lap delta
  */
 function focused_BestToBestDelta() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
-  return DynLeaderboardsPluginProp(
-    leaderBoardName,
-    _focusedPosition,
-    "Laps.Best.Delta.To" + leaderboardType() + "Best"
-  );
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Best.Delta.ToClassBest");
 }
 
 /**
@@ -117,15 +113,11 @@ function driver_LastLapDelta(position) {
 
 /**
  *
- * @returns focused car last lap to overall/class best lap delta
+ * @returns focused car last lap to class best lap delta
  */
 function focused_LastToBestDelta() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
-  return DynLeaderboardsPluginProp(
-    leaderBoardName,
-    _focusedPosition,
-    "Laps.Last.Delta.To" + leaderboardType() + "Best"
-  );
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Last.Delta.ToClassBest");
 }
 
 /**
