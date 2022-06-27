@@ -20,10 +20,10 @@ function isDriver(position) {
 /**
  *
  * @param {number} position driver position in leader board
- * @returns {number} driver overall position
+ * @returns {number} driver overall/class position
  */
 function driver_Position(position) {
-  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position.Overall");
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position." + leaderboardType());
 }
 
 /**
@@ -68,12 +68,21 @@ function driver_BestLapDelta(position) {
 }
 
 /**
+ *
+ * @returns focused car best lap to class best lap delta
+ */
+function focused_BestToBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Best.Delta.ToClassBest");
+}
+
+/**
  * check if driver has session best lap time
  * @param {number} position driver position in leader board
  * @returns true or false
  */
 function driver_HasBestLap(position) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, position, "IsOverallBestLapCar")) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, position, "Is" + leaderboardType() + "BestLapCar")) {
     return true;
   }
   return false;
@@ -100,6 +109,15 @@ function driver_LastLapDelta(position) {
     "Laps.Last.Delta.Dynamic.ToFocusedLast"
   );
   return _driverLastLapDelta === null ? null : -Math.min(Math.max(_driverLastLapDelta, -99.9), 99.9);
+}
+
+/**
+ *
+ * @returns focused car last lap to class best lap delta
+ */
+function focused_LastToBestDelta() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Laps.Last.Delta.ToClassBest");
 }
 
 /**
@@ -136,14 +154,15 @@ function driver_LastLapSectorTime(position, sectorNr) {
  * @returns delta in seconds
  */
 function driver_LastLapSectorDelta(position, sectorNr) {
-  var _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
-  var _playerLastLapSector = driver_LastLapSectorTime(
+  const _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
+  const _focusedLastLapSector = driver_LastLapSectorTime(
     $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
     sectorNr
   );
-  return _driverLastLapSector === null
-    ? null
-    : Math.min(Math.max(_playerLastLapSector - _driverLastLapSector, -99.9), 99.9);
+  if (_driverLastLapSector === null || _focusedLastLapSector === null) {
+    return null;
+  }
+  return Math.min(Math.max(_focusedLastLapSector - _driverLastLapSector, -99.9), 99.9);
 }
 /**
  *
@@ -153,6 +172,23 @@ function driver_LastLapSectorDelta(position, sectorNr) {
  */
 function driver_BestSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
+}
+/**
+ * calculate driver best sector time delta to focused
+ * @param {number} position driver position in leader board
+ * @param {number} sectorNr sector number
+ * @returns delta in seconds
+ */
+function driver_BestSectorDelta(position, sectorNr) {
+  const _driverBestLapSector = driver_BestSectorTime(position, sectorNr);
+  const _focusedBestLapSector = driver_BestSectorTime(
+    $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
+    sectorNr
+  );
+  if (_driverBestLapSector === null || _focusedBestLapSector === null) {
+    return null;
+  }
+  return Math.min(Math.max(_focusedBestLapSector - _driverBestLapSector, -99.9), 99.9);
 }
 /**
  *
@@ -181,11 +217,17 @@ function secToTimeStr(sec) {
 }
 
 function gapBackgroundColor(gap, defaultColor) {
+  if (gap === null) {
+    return defaultColor;
+  }
   if (gap < -0.5) {
     return "Green";
   }
   if (gap < -0.1) {
     return "GreenYellow";
+  }
+  if (gap >= -0.1 && gap <= 0.1) {
+    return "White";
   }
   if (gap > 0.5) {
     return "Red";
@@ -196,20 +238,22 @@ function gapBackgroundColor(gap, defaultColor) {
   return defaultColor;
 }
 
-function gapTextColor(gap) {
-  if (gap < -0.5) {
-    return "White";
+function gapTextColor(gapBackgroundColor) {
+  switch (gapBackgroundColor) {
+    case "Purple":
+    case "Green":
+    case "Red":
+    case "Black":
+      return "White";
+    case "DeepSkyBlue":
+    case "GreenYellow":
+    case "OrangeRed":
+    case "White":
+      return "Black";
+
+    default:
+      return "Black";
   }
-  if (gap < -0.1) {
-    return "Black";
-  }
-  if (gap > 0.5) {
-    return "White";
-  }
-  if (gap > 0.1) {
-    return "Black";
-  }
-  return "Black";
 }
 
 function isPartialLeaderBoard(leaderBoard) {
@@ -232,7 +276,7 @@ function LBPosition(repeatIndex, screen) {
             return repeatIndex + 1;
           case 4:
             return repeatIndex + 2;
-        
+
           default:
             return repeatIndex + 3;
         }
@@ -242,4 +286,12 @@ function LBPosition(repeatIndex, screen) {
     default:
       return repeatIndex;
   }
+}
+
+function leaderboardType() {
+  const _currentLeaderboard = $prop("DynLeaderboardsPlugin." + leaderBoardName + "." + "CurrentLeaderboard");
+  if (/(Partial)?RelativeClass/.test(_currentLeaderboard)) {
+    return "Class";
+  }
+  return "Overall";
 }

@@ -3,6 +3,22 @@
  */
 
 /**
+ * main window functions
+ */
+function mainWindowVisible() {
+  const inMenu = $prop("TyrePressureFrontLeft") === 0;
+  if (!inMenu) {
+    return true;
+  }
+  if ($prop("GameRawData.Graphics.IsSetupMenuVisible") === 1) {
+    return false;
+  }
+  const playerCarID = $prop("DataCorePlugin.GameRawData.Graphics.PlayerCarID");
+  const focusedCarID = $prop("DataCorePlugin.GameRawData.Realtime.FocusedCarIndex");
+  return focusedCarID !== playerCarID;
+}
+
+/**
  * position box functions
  */
 function positionBoxVisible(LBposition) {
@@ -10,11 +26,26 @@ function positionBoxVisible(LBposition) {
 }
 
 function positionBoxBackground(LBposition) {
-  return driver_HasBestLap(LBposition) ? "Purple" : "White";
+  return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Class.Color");
 }
 
 function positionBoxTextColor(LBposition) {
-  return driver_HasBestLap(LBposition) ? "White" : "Black";
+  const _carClass = DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Class");
+  switch (_carClass) {
+    case "ST15":
+    case "CUP17":
+      return "Black";
+    case "GT3":
+    case "GT4":
+    case "CHL":
+    case "CUP21":
+    case "ST21":
+    case "TCX":
+      return "White";
+
+    default:
+      return "Black";
+  }
 }
 
 function positionBoxText(LBposition) {
@@ -81,36 +112,43 @@ function bestLapBoxBackground(LBposition) {
   if (driver_HasBestLap(LBposition)) {
     return "Purple";
   }
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
+  ) {
     return "DeepSkyBlue";
   }
   return gapBackgroundColor(driver_BestLapDelta(LBposition), "DeepSkyBlue");
 }
 
 function bestLapBoxTextColor(LBposition) {
-  if (driver_HasBestLap(LBposition)) {
-    return "White";
-  }
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    return "Black";
-  }
-  return gapTextColor(driver_BestLapDelta(LBposition));
+  return gapTextColor(bestLapBoxBackground(LBposition));
 }
 
 function bestLapBoxText(LBposition) {
+  const _delta = driver_BestLapDelta(LBposition);
   if (
-    driver_BestLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY" ||
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_BestToBestDelta() >= 30
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
-  return format(driver_BestLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
  * last lap box functions
  */
 function lastLapBoxVisible(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (driver_BestLapDelta(LBposition) === null) {
+      return false;
+    }
+    return true;
+  }
   if (driver_LastLapTime(LBposition) === null) {
     return false;
   }
@@ -118,43 +156,55 @@ function lastLapBoxVisible(LBposition) {
 }
 
 function lastLapBoxBackground(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition)) {
-      return driver_HasBestLap(LBposition) ? "Purple" : "DeepSkyBlue";
-    }
-    return "White";
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return gapBackgroundColor(driver_BestLapDelta(LBposition), "DeepSkyBlue");
   }
-  if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition) && driver_HasBestLap(LBposition)) {
+  const _lastIsPB = driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition);
+  if (_lastIsPB && driver_HasBestLap(LBposition)) {
     return "Purple";
   }
-  return gapBackgroundColor(driver_LastLapDelta(LBposition), "White");
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+    return _lastIsPB ? "DeepSkyBlue" : "White";
+  }
+  return gapBackgroundColor(driver_LastLapDelta(LBposition), _lastIsPB ? "DeepSkyBlue" : "White");
 }
 
 function lastLapBoxTextColor(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    if (driver_LastLapTime(LBposition) === driver_BestLapTime(LBposition)) {
-      return driver_HasBestLap(LBposition) ? "White" : "Black";
-    }
-    return "Black";
-  }
-  return gapTextColor(driver_LastLapDelta(LBposition));
+  return gapTextColor(lastLapBoxBackground(LBposition));
 }
 
 function lastLapBoxText(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return format(driver_BestLapDelta(LBposition), "0.0", true);
+  }
+  const _delta = driver_LastLapDelta(LBposition);
   if (
-    driver_LastLapDelta(LBposition) === null ||
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1
+    _delta === null ||
+    Math.abs(_delta) >= 60 ||
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    focused_LastToBestDelta() >= 30
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
-  return format(driver_LastLapDelta(LBposition), "0.0", true);
+  return format(_delta, "0.0", true);
 }
 
 /**
  * delta box functions
  */
+
+function deltaBoxCheckered(LBposition) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFinished") === 1) {
+    return true;
+  }
+  return false;
+}
+
 function deltaBoxVisible(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  if (
+    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
+    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
+  ) {
     return false;
   }
   return true;
@@ -168,10 +218,7 @@ function deltaBoxBackground(LBposition) {
 }
 
 function deltaBoxTextColor(LBposition) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
-    return "White";
-  }
-  return gapTextColor(driver_Gap(LBposition));
+  return gapTextColor(deltaBoxBackground(LBposition));
 }
 
 function deltaBoxText(LBposition) {
@@ -182,25 +229,75 @@ function deltaBoxText(LBposition) {
  * sectors boxes functions
  */
 function sectorBoxVisible(LBposition, sector) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return driver_BestSectorTime(LBposition, sector) !== null;
+  }
   return driver_LastLapSectorTime(LBposition, sector) !== null;
 }
 
 function sectorBoxBackground(LBposition, sector) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
+  let _delta = driver_LastLapSectorDelta(LBposition, sector);
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    _delta = driver_BestSectorDelta(LBposition, sector);
+  }
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
+    if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+      return "DeepSkyBlue";
+    }
     return driver_LastSectorIsPB(LBposition, sector) ? "DeepSkyBlue" : "White";
   }
-  var sectorDelta = driver_LastLapSectorDelta(LBposition, sector);
-  return gapBackgroundColor(sectorDelta, "White");
+  return gapBackgroundColor(_delta, "White");
 }
 
 function sectorBoxTextColor(LBposition, sector) {
-  var sectorDelta = driver_LastLapSectorDelta(LBposition, sector);
-  return gapTextColor(sectorDelta);
+  return gapTextColor(sectorBoxBackground(LBposition, sector));
 }
 
 function sectorBoxText(LBposition, sector) {
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1) {
-    return format(driver_LastLapSectorTime(LBposition, sector), "0.0", false);
+  let _delta = driver_LastLapSectorDelta(LBposition, sector);
+  let _time = driver_LastLapSectorTime(LBposition, sector);
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    _delta = driver_BestSectorDelta(LBposition, sector);
+    _time = driver_BestSectorTime(LBposition, sector);
   }
-  return format(driver_LastLapSectorDelta(LBposition, sector), "0.0", true);
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
+    return format(_time, "0.0", false);
+  }
+  return format(_delta, "0.0", true);
+}
+
+/**
+ * leaderboard labels
+ */
+function leaderboardTypeVisible() {
+  return true;
+}
+
+function leaderboardTypeBackground() {
+  return "#80000000";
+}
+
+function leaderboardTypeTextColor() {
+  return "White";
+}
+
+function leaderboardTypeText() {
+  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard");
+}
+
+function classNameVisible() {
+  return leaderboardType() == "Class";
+}
+
+function classNameBackground() {
+  return "#80000000";
+}
+
+function classNameTextColor() {
+  return "White";
+}
+
+function classNameText() {
+  const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
+  return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Car.Class");
 }
