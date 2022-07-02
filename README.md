@@ -47,7 +47,7 @@
 
 ### Dynamic Leaderboards Plugin
 
-all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards#getting-started) and setup plugin
+all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.0#getting-started) and setup plugin
 
 #### leaderboard rotation
 
@@ -63,7 +63,7 @@ leaderboard name `gaps`
 
 ### overlay setup
 
-- download latest release from [here](https://github.com/serek4/simhub-gaps-overlay/releases)
+- download current release from [here](https://github.com/serek4/simhub-gaps-overlay/releases/download/v1.1.1/simhub-gaps-overlay-v1.1.1.zip)
 - import [gaps-overlay.simhubhash](gaps-overlay.simhubdash) to SimHub (double click)
 - copy content of SimHub folder to SimHub root folder `C:\Program Files (x86)\SimHub\`
 - restart SimHub
