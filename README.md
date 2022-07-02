@@ -49,6 +49,18 @@
 
 all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards#getting-started) and setup plugin
 
+#### leaderboard rotation
+
+by default overlay have this leaderboards:
+- RelativeOnTrack
+- RelativeOverall
+- PartialRelativeClass
+
+you can use any relative leaderboard you want and reorder them in  
+SimHub -> DynLeaderboard side tab -> Dynamic leaderboards tab  
+
+leaderboard name `gaps`
+
 ### overlay setup
 
 - download latest release from [here](https://github.com/serek4/simhub-gaps-overlay/releases)
