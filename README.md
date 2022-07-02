@@ -40,80 +40,33 @@
 
 ## dependencies
 
-- [SimHub V8.0.1](https://www.simhubdash.com/download-2/)
-- [SimHub ACC Dynamic Leaderboards Plugin](https://github.com/kaiusl/KLPlugins.DynLeaderboards) (tested on [v1.1.1](https://github.com/kaiusl/KLPlugins.DynLeaderboards/releases/tag/v1.1.1))
+- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.0.2)
+- [SimHub ACC Dynamic Leaderboards Plugin v1.2.0](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.0)
 
 ## setup
 
 ### Dynamic Leaderboards Plugin
 
-[Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards#getting-started)
-
-go to **SimHub** -> **DynLeaderboard** side tab -> **Dynamic leaderboards** tab
-
-#### dynamic leaderboards
-- `Add new leaderboard` (or rename default one)
-- (re)name it `gaps`
+all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.0#getting-started) and setup plugin
 
 #### leaderboard rotation
-- :white_check_mark: RelativeOnTrack
-- :ballot_box_with_check: RelativeOverall
-- :ballot_box_with_check: RelativeClass
-- :ballot_box_with_check: PartialRelativeOverall
-- :ballot_box_with_check: PartialRelativeClass
 
+by default overlay have this leaderboards:
+- RelativeOnTrack
+- RelativeOverall
+- PartialRelativeClass
 
-#### number of positions
-- overall leaderboards: 7
-- relative leaderboards: 3
-- partial relative leaderboards : top 2, relative 2
+you can use any relative leaderboard you want and reorder them in  
+SimHub -> DynLeaderboard side tab -> Dynamic leaderboards tab  
 
-#### properties for each car
-- `Car information`
-  - :white_check_mark: Car.Number
-  - :white_check_mark: Car.Class
-  - :white_check_mark: Car.Class.Color
-  - :white_check_mark: Team.CupCategory.Color
-  - :white_check_mark: Team.CupCategory.TextColor
-- `Lap information`
-  - :white_check_mark: Laps.Last.Time
-  - :white_check_mark: Laps.Last.S1/2/3
-  - :white_check_mark: Laps.Best.Time
-  - :white_check_mark: BestS1/2/3
-- `Best to best`
-  - :white_check_mark: Laps.Best.Delta.ToClassBest
-  - :white_check_mark: Laps.Best.Delta.Dynamic.ToFocusedBest
-- `Last to best`
-  - :white_check_mark: Laps.Last.Delta.ToClassBest
-- `Last to last`
-  - :white_check_mark: Laps.Last.Delta.ToFocusedLast
-- `Gaps`
-  - :white_check_mark: Gap.ToFocused.OnTrack
-- `Positions`
-  - :white_check_mark: Position.Overall
-  - :white_check_mark: Position.Class
-- `Pit information`
-  - :white_check_mark: Pit.IsIn
-- `Other`
-  - :white_check_mark: IsFinished
-  - :white_check_mark: IsFocused
-  - :white_check_mark: IsOverallBestLapCar
-  - :white_check_mark: IsClassBestLapCar
-  - :white_check_mark: RelativeOnTrackLapDiff
-
-#### properties for each driver
-- `Names`
-  - :white_check_mark: InitialPlusLastName
-
-*:white_check_mark: - required  
-*:ballot_box_with_check: - optional
+leaderboard name `gaps`
 
 ### overlay setup
 
-- download latest release from [here](https://github.com/serek4/simhub-gaps-overlay/releases)
+- download current release from [here](https://github.com/serek4/simhub-gaps-overlay/releases/download/v1.1.1/simhub-gaps-overlay-v1.1.1.zip)
 - import [gaps-overlay.simhubhash](gaps-overlay.simhubdash) to SimHub (double click)
-- copy [gaps-overlay-src.js](gaps-overlay-src.js) and [gaps-overlay-screen.js](gaps-overlay-screen.js) to  
-  `C:\Program Files (x86)\SimHub\JavascriptExtensions` folder
+- copy content of SimHub folder to SimHub root folder `C:\Program Files (x86)\SimHub\`
+- restart SimHub
 
 ### overlay controls
 

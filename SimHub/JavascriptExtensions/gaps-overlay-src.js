@@ -23,7 +23,7 @@ function isDriver(position) {
  * @returns {number} driver overall/class position
  */
 function driver_Position(position) {
-  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position." + leaderboardType());
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Position.Dynamic");
 }
 
 /**

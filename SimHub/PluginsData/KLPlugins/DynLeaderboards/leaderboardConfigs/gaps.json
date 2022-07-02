@@ -1,0 +1,27 @@
+{
+  "OutCarProps": 31689,
+  "OutPitProps": 1,
+  "OutPosProps": 16,
+  "OutGapProps": 1048584,
+  "OutStintProps": 0,
+  "OutDriverProps": 64,
+  "OutLapProps": 4295624750,
+  "Version": 1,
+  "Name": "gaps",
+  "NumOverallPos": 7,
+  "NumClassPos": 7,
+  "NumOnTrackRelativePos": 3,
+  "NumOverallRelativePos": 3,
+  "NumClassRelativePos": 3,
+  "NumDrivers": 1,
+  "PartialRelativeOverallNumOverallPos": 2,
+  "PartialRelativeOverallNumRelativePos": 2,
+  "PartialRelativeClassNumClassPos": 2,
+  "PartialRelativeClassNumRelativePos": 2,
+  "Order": [
+    7,
+    3,
+    6
+  ],
+  "CurrentLeaderboardIdx": 1
+}
