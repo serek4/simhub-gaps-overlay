@@ -137,7 +137,10 @@ function driver_Gap(position) {
     }
     return format(Math.min(Math.max(_dynamicGapToFocused, -99.9), 99.9), "0.0", true);
   }
-  return null;
+  const _gapToFocusedOnTrack = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.ToFocused.OnTrack");
+  return _gapToFocusedOnTrack === null
+    ? null
+    : format(Math.min(Math.max(_gapToFocusedOnTrack, -99.9), 99.9), "0.0", true);
 }
 
 /**
