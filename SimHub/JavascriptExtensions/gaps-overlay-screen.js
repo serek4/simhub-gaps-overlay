@@ -226,7 +226,7 @@ function deltaBoxTextColor(LBposition) {
 }
 
 function deltaBoxText(LBposition) {
-  return format(driver_Gap(LBposition), "0.0", true);
+  return driver_Gap(LBposition);
 }
 
 /**

@@ -127,8 +127,17 @@ function focused_LastToBestDelta() {
  * @returns driver current gap to focused (negative = behind, positive = ahead)
  */
 function driver_Gap(position) {
-  var _driverGapToFocused = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.ToFocused.OnTrack");
-  return _driverGapToFocused === null ? null : Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
+  var _dynamicGapToFocused = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.Dynamic.ToFocused");
+  //* https://github.com/kaiusl/KLPlugins.DynLeaderboards/wiki/Available-properties#1-things-to-know
+  if (_dynamicGapToFocused !== null) {
+    // No gap can realistically be 50000 seconds without being more than a lap
+    // and you cannot realistically be more than 50000 laps behind to break following
+    if (_dynamicGapToFocused > 50000) {
+      return format(_dynamicGapToFocused - 100000, "0", true) + "L";
+    }
+    return format(Math.min(Math.max(_dynamicGapToFocused, -99.9), 99.9), "0.0", true);
+  }
+  return null;
 }
 
 /**
@@ -221,6 +230,7 @@ function gapBackgroundColor(gap, defaultColor) {
   if (gap === null) {
     return defaultColor;
   }
+  gap = parseFloat(gap);
   if (gap < -0.5) {
     return "Green";
   }
