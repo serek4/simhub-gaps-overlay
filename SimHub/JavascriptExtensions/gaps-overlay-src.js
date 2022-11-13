@@ -41,7 +41,8 @@ function driver_CarNumber(position) {
  * @returns {string} driver name with short first name (J. Smith)
  */
 function driver_Name(position) {
-  return DynLeaderboardsPluginProp(leaderBoardName, position, "Driver.1.InitialPlusLastName");
+  const teamName = /(\s*\|\s*.+)|(\s*\[.+\]\s*)$/;
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Driver.1.InitialPlusLastName").replace(teamName, "");
 }
 
 /**
