@@ -7,15 +7,19 @@
  */
 function mainWindowVisible() {
   const inMenu = $prop("TyrePressureFrontLeft") === 0;
-  if (!inMenu) {
-    return true;
+  const solo = $prop("OpponentsCount") <= 1;
+  if (!solo) {
+    if (!inMenu) {
+      return true;
+    }
+    if ($prop("GameRawData.Graphics.IsSetupMenuVisible") === 1) {
+      return false;
+    }
+    const playerCarID = $prop("DataCorePlugin.GameRawData.Graphics.PlayerCarID");
+    const focusedCarID = $prop("DataCorePlugin.GameRawData.Realtime.FocusedCarIndex");
+    return focusedCarID !== playerCarID;
   }
-  if ($prop("GameRawData.Graphics.IsSetupMenuVisible") === 1) {
-    return false;
-  }
-  const playerCarID = $prop("DataCorePlugin.GameRawData.Graphics.PlayerCarID");
-  const focusedCarID = $prop("DataCorePlugin.GameRawData.Realtime.FocusedCarIndex");
-  return focusedCarID !== playerCarID;
+  return false;
 }
 
 /**
@@ -222,7 +226,7 @@ function deltaBoxTextColor(LBposition) {
 }
 
 function deltaBoxText(LBposition) {
-  return format(driver_Gap(LBposition), "0.0", true);
+  return driver_Gap(LBposition);
 }
 
 /**

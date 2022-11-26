@@ -40,7 +40,7 @@
 
 ## dependencies
 
-- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.0.2)
+- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.1.3)
 - [SimHub ACC Dynamic Leaderboards Plugin v1.2.0](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.0)
 
 ## setup
@@ -63,7 +63,7 @@ leaderboard name `gaps`
 
 ### overlay setup
 
-- download current release from [here](https://github.com/serek4/simhub-gaps-overlay/releases/download/v1.1.1/simhub-gaps-overlay-v1.1.1.zip)
+- download [latest](https://github.com/serek4/simhub-gaps-overlay/releases/latest) release
 - import [gaps-overlay.simhubhash](gaps-overlay.simhubdash) to SimHub (double click)
 - copy content of SimHub folder to SimHub root folder `C:\Program Files (x86)\SimHub\`
 - restart SimHub

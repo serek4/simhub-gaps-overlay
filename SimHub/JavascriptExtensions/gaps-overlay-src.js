@@ -41,7 +41,8 @@ function driver_CarNumber(position) {
  * @returns {string} driver name with short first name (J. Smith)
  */
 function driver_Name(position) {
-  return DynLeaderboardsPluginProp(leaderBoardName, position, "Driver.1.InitialPlusLastName");
+  const teamName = /(\s*\|\s*.+)|(\s*\[.+\]\s*)$/;
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Driver.1.InitialPlusLastName").replace(teamName, "");
 }
 
 /**
@@ -126,8 +127,20 @@ function focused_LastToBestDelta() {
  * @returns driver current gap to focused (negative = behind, positive = ahead)
  */
 function driver_Gap(position) {
-  var _driverGapToFocused = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.ToFocused.OnTrack");
-  return _driverGapToFocused === null ? null : Math.min(Math.max(_driverGapToFocused, -99.9), 99.9);
+  var _dynamicGapToFocused = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.Dynamic.ToFocused");
+  //* https://github.com/kaiusl/KLPlugins.DynLeaderboards/wiki/Available-properties#1-things-to-know
+  if (_dynamicGapToFocused !== null) {
+    // No gap can realistically be 50000 seconds without being more than a lap
+    // and you cannot realistically be more than 50000 laps behind to break following
+    if (_dynamicGapToFocused > 50000) {
+      return format(_dynamicGapToFocused - 100000, "0", true) + "L";
+    }
+    return format(Math.min(Math.max(_dynamicGapToFocused, -99.9), 99.9), "0.0", true);
+  }
+  const _gapToFocusedOnTrack = DynLeaderboardsPluginProp(leaderBoardName, position, "Gap.ToFocused.OnTrack");
+  return _gapToFocusedOnTrack === null
+    ? null
+    : format(Math.min(Math.max(_gapToFocusedOnTrack, -99.9), 99.9), "0.0", true);
 }
 
 /**
@@ -220,6 +233,7 @@ function gapBackgroundColor(gap, defaultColor) {
   if (gap === null) {
     return defaultColor;
   }
+  gap = parseFloat(gap);
   if (gap < -0.5) {
     return "Green";
   }
