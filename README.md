@@ -74,3 +74,5 @@ leaderboard name `gaps`
   add mapping for `Show next dash screen` and/or `Show previous dash screen`
 - to switch between leader boards go to **SimHub** -> **Controls and events** side tab and  
   add mapping for `DynLeaderboardsPlugin.gaps.NextLeaderboard` and/or `DynLeaderboardsPlugin.gaps.PreviousLeaderboard`
+- to switch between gaps and lap times go to **SimHub** -> **Controls and events** side tab and  
+  add mapping for `GraphicalDashPlugin.actionA`

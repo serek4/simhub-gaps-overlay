@@ -129,14 +129,15 @@ function bestLapBoxTextColor(LBposition) {
   return gapTextColor(bestLapBoxBackground(LBposition));
 }
 
-function bestLapBoxText(LBposition) {
+function bestLapBoxText(LBposition, mode) {
   const _delta = driver_BestLapDelta(LBposition);
   if (
     $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY" ||
     _delta === null ||
     Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    focused_BestToBestDelta() >= 30
+    focused_BestToBestDelta() >= 30 ||
+    mode === "time"
   ) {
     return secToTimeStr(driver_BestLapTime(LBposition));
   }
@@ -177,7 +178,7 @@ function lastLapBoxTextColor(LBposition) {
   return gapTextColor(lastLapBoxBackground(LBposition));
 }
 
-function lastLapBoxText(LBposition) {
+function lastLapBoxText(LBposition, mode) {
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
     return format(driver_BestLapDelta(LBposition), "0.0", true);
   }
@@ -186,7 +187,8 @@ function lastLapBoxText(LBposition) {
     _delta === null ||
     Math.abs(_delta) >= 60 ||
     DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    focused_LastToBestDelta() >= 30
+    focused_LastToBestDelta() >= 30 ||
+    mode === "time"
   ) {
     return secToTimeStr(driver_LastLapTime(LBposition));
   }
@@ -257,14 +259,14 @@ function sectorBoxTextColor(LBposition, sector) {
   return gapTextColor(sectorBoxBackground(LBposition, sector));
 }
 
-function sectorBoxText(LBposition, sector) {
+function sectorBoxText(LBposition, sector, mode) {
   let _delta = driver_LastLapSectorDelta(LBposition, sector);
   let _time = driver_LastLapSectorTime(LBposition, sector);
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
     _delta = driver_BestSectorDelta(LBposition, sector);
     _time = driver_BestSectorTime(LBposition, sector);
   }
-  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
+  if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null || mode === "time") {
     return format(_time, "0.0", false);
   }
   return format(_delta, "0.0", true);
