@@ -207,12 +207,6 @@ function deltaBoxCheckered(LBposition) {
 }
 
 function deltaBoxVisible(LBposition) {
-  if (
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
-  ) {
-    return false;
-  }
   return true;
 }
 
@@ -220,7 +214,13 @@ function deltaBoxBackground(LBposition) {
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
     return "Black";
   }
-  return gapBackgroundColor(driver_Gap(LBposition), "White");
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
+      return "OrangeRed";
+    }
+    return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsValid") ? "Green" : "Red";
+  }
+  return gapBackgroundColor(driver_Gap(LBposition), "Black");
 }
 
 function deltaBoxTextColor(LBposition) {
@@ -228,6 +228,15 @@ function deltaBoxTextColor(LBposition) {
 }
 
 function deltaBoxText(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
+      return "out lap";
+    }
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
+      return "in pit";
+    }
+    return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsValid") ? "fast" : "invalid";
+  }
   return driver_Gap(LBposition);
 }
 
