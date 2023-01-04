@@ -288,7 +288,9 @@ function leaderboardTypeTextColor() {
 }
 
 function leaderboardTypeText() {
-  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard");
+  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard")
+    .replace(/([A-Z])/g, " $1")
+    .toLowerCase();
 }
 
 function classNameVisible() {
