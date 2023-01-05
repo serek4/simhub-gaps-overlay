@@ -282,7 +282,7 @@ function sectorBoxText(LBposition, sector, mode) {
 }
 
 /**
- * leaderboard labels
+ * labels
  */
 function leaderboardTypeVisible() {
   return true;
@@ -317,4 +317,23 @@ function classNameTextColor() {
 function classNameText() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
   return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Car.Class");
+}
+
+function displayModeVisible() {
+  return true;
+}
+
+function displayModeBackground() {
+  return "#80000000";
+}
+
+function displayModeTextColor() {
+  return "White";
+}
+
+function displayModeText(mode) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return "quali";
+  }
+  return mode;
 }
