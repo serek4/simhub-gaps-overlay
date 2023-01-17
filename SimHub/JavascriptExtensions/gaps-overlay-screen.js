@@ -229,11 +229,11 @@ function deltaBoxTextColor(LBposition) {
 
 function deltaBoxText(LBposition) {
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
-    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
-      return "out lap";
-    }
     if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
       return "in pit";
+    }
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
+      return "out lap";
     }
     return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsValid") ? "fast" : "invalid";
   }
