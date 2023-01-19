@@ -183,6 +183,9 @@ function driver_LastLapSectorDelta(position, sectorNr) {
  * @param {number} sectorNr sector number to compare
  * @returns time in seconds
  */
+function driver_BestLapSectorTime(position, sectorNr) {
+  return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Best.S" + sectorNr);
+}
 function driver_BestSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
 }
@@ -192,9 +195,9 @@ function driver_BestSectorTime(position, sectorNr) {
  * @param {number} sectorNr sector number
  * @returns delta in seconds
  */
-function driver_BestSectorDelta(position, sectorNr) {
-  const _driverBestLapSector = driver_BestSectorTime(position, sectorNr);
-  const _focusedBestLapSector = driver_BestSectorTime(
+function driver_BestLapSectorDelta(position, sectorNr) {
+  const _driverBestLapSector = driver_BestLapSectorTime(position, sectorNr);
+  const _focusedBestLapSector = driver_BestLapSectorTime(
     $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1,
     sectorNr
   );

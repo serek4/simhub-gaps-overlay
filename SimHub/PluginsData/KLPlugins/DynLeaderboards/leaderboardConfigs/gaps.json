@@ -5,7 +5,7 @@
   "OutGapProps": 1048584,
   "OutStintProps": 0,
   "OutDriverProps": 64,
-  "OutLapProps": 4295624750,
+  "OutLapProps": 47245297726,
   "Version": 1,
   "Name": "gaps",
   "NumOverallPos": 7,
@@ -19,9 +19,9 @@
   "PartialRelativeClassNumClassPos": 2,
   "PartialRelativeClassNumRelativePos": 2,
   "Order": [
-    7,
+    8,
     3,
     6
   ],
-  "CurrentLeaderboardIdx": 1
+  "CurrentLeaderboardIdx": 0
 }

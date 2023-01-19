@@ -207,12 +207,6 @@ function deltaBoxCheckered(LBposition) {
 }
 
 function deltaBoxVisible(LBposition) {
-  if (
-    DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 ||
-    $prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY"
-  ) {
-    return false;
-  }
   return true;
 }
 
@@ -220,7 +214,13 @@ function deltaBoxBackground(LBposition) {
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
     return "Black";
   }
-  return gapBackgroundColor(driver_Gap(LBposition), "White");
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
+      return "OrangeRed";
+    }
+    return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsValid") ? "Green" : "Red";
+  }
+  return gapBackgroundColor(driver_Gap(LBposition), "Black");
 }
 
 function deltaBoxTextColor(LBposition) {
@@ -228,6 +228,15 @@ function deltaBoxTextColor(LBposition) {
 }
 
 function deltaBoxText(LBposition) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Pit.IsIn")) {
+      return "in pit";
+    }
+    if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsOutLap")) {
+      return "out lap";
+    }
+    return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Laps.Current.IsValid") ? "fast" : "invalid";
+  }
   return driver_Gap(LBposition);
 }
 
@@ -236,7 +245,7 @@ function deltaBoxText(LBposition) {
  */
 function sectorBoxVisible(LBposition, sector) {
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
-    return driver_BestSectorTime(LBposition, sector) !== null;
+    return driver_BestLapSectorTime(LBposition, sector) !== null;
   }
   return driver_LastLapSectorTime(LBposition, sector) !== null;
 }
@@ -244,7 +253,7 @@ function sectorBoxVisible(LBposition, sector) {
 function sectorBoxBackground(LBposition, sector) {
   let _delta = driver_LastLapSectorDelta(LBposition, sector);
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
-    _delta = driver_BestSectorDelta(LBposition, sector);
+    _delta = driver_BestLapSectorDelta(LBposition, sector);
   }
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null) {
     if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
@@ -263,8 +272,8 @@ function sectorBoxText(LBposition, sector, mode) {
   let _delta = driver_LastLapSectorDelta(LBposition, sector);
   let _time = driver_LastLapSectorTime(LBposition, sector);
   if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
-    _delta = driver_BestSectorDelta(LBposition, sector);
-    _time = driver_BestSectorTime(LBposition, sector);
+    _delta = driver_BestLapSectorDelta(LBposition, sector);
+    _time = driver_BestLapSectorTime(LBposition, sector);
   }
   if (DynLeaderboardsPluginProp(leaderBoardName, LBposition, "IsFocused") === 1 || _delta === null || mode === "time") {
     return format(_time, "0.0", false);
@@ -273,7 +282,7 @@ function sectorBoxText(LBposition, sector, mode) {
 }
 
 /**
- * leaderboard labels
+ * labels
  */
 function leaderboardTypeVisible() {
   return true;
@@ -288,7 +297,9 @@ function leaderboardTypeTextColor() {
 }
 
 function leaderboardTypeText() {
-  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard");
+  return $prop("DynLeaderboardsPlugin." + leaderBoardName + ".CurrentLeaderboard")
+    .replace(/([A-Z])/g, " $1")
+    .toLowerCase();
 }
 
 function classNameVisible() {
@@ -306,4 +317,23 @@ function classNameTextColor() {
 function classNameText() {
   const _focusedPosition = $prop("DynLeaderboardsPlugin." + leaderBoardName + ".FocusedPosInCurrentLeaderboard") + 1;
   return DynLeaderboardsPluginProp(leaderBoardName, _focusedPosition, "Car.Class");
+}
+
+function displayModeVisible() {
+  return true;
+}
+
+function displayModeBackground() {
+  return "#80000000";
+}
+
+function displayModeTextColor() {
+  return "White";
+}
+
+function displayModeText(mode) {
+  if ($prop("DataCorePlugin.GameData.SessionTypeName") === "QUALIFY") {
+    return "quali";
+  }
+  return mode;
 }
