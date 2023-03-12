@@ -76,6 +76,21 @@ function carNumberBoxText(LBposition) {
 }
 
 /**
+ * car logo box functions
+ */
+function carLogoBoxVisible(LBposition) {
+  return true;
+}
+
+function carLogoBoxBackground(LBposition) {
+  return "Black";
+}
+
+function carLogoBoxImage(LBposition) {
+  return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Manufacturer").toLowerCase().replace(/\d/, "").replace(" ", "-");
+}
+
+/**
  * name box functions
  */
 function nameBoxVisible(LBposition) {

@@ -227,6 +227,13 @@ function driver_LastSectorIsPB(position, sectorNr) {
 function DynLeaderboardsPluginProp(leaderBoard, position, prop) {
   return $prop("DynLeaderboardsPlugin." + leaderBoard + "." + position + "." + prop);
 }
+/**
+ * @param {number} interval update rate in seconds
+ * @returns number of renders to skip
+ */
+function updateRate(interval) {
+  return Math.round($prop("DataCorePlugin.DataUpdateFps") * interval);
+}
 
 function secToTimeStr(sec) {
   return new Date(Math.round(sec * 10) * 100).toISOString().substr(14, 7);
