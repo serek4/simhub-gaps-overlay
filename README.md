@@ -27,14 +27,15 @@
 
 ## dependencies
 
-- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.2.3)
-- [SimHub ACC Dynamic Leaderboards Plugin v1.2.2](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.2)
+- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.3.7)
+- [SimHub ACC Dynamic Leaderboards Plugin v1.3.0](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.0)
 
 ## setup
 
 ### Dynamic Leaderboards Plugin
 
-all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.2.2#getting-started) and setup plugin
+all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.0#getting-started) and setup plugin.  
+you can skip controls mapping for default(Dynamic) leaderboard if you will not use it.
 
 #### leaderboard rotation
 
@@ -51,7 +52,7 @@ leaderboard name `gaps`
 ### overlay setup
 
 - download [latest](https://github.com/serek4/simhub-gaps-overlay/releases/latest) release
-- import `gaps-overlay-v1.5.simhubdash` to SimHub (double click)
+- import `gaps-overlay-v1.6.simhubdash` to SimHub (double click)
 - copy content of SimHub folder to SimHub root folder `C:\Program Files (x86)\SimHub\`
 - restart SimHub
 
