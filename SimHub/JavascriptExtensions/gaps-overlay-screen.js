@@ -87,7 +87,8 @@ function carLogoBoxBackground(LBposition) {
 }
 
 function carLogoBoxImage(LBposition) {
-  return DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Manufacturer").toLowerCase().replace(/\d/, "").replace(" ", "-");
+  const carManufacturer = DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Manufacturer");
+  return carManufacturer === null ? null : carManufacturer.toLowerCase().replace(/\d/, "").replace(" ", "-");
 }
 
 /**
