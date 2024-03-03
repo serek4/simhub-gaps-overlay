@@ -27,14 +27,14 @@
 
 ## dependencies
 
-- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.3.7)
-- [SimHub ACC Dynamic Leaderboards Plugin v1.3.0](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.0)
+- [SimHub V8](https://www.simhubdash.com/download-2/) (tested on 8.3.12)
+- [SimHub ACC Dynamic Leaderboards Plugin v1.3.3](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.3)
 
 ## setup
 
 ### Dynamic Leaderboards Plugin
 
-all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.0#getting-started) and setup plugin.  
+all data comes from plugin so first go to [Plugin Getting started instructions](https://github.com/kaiusl/KLPlugins.DynLeaderboards/tree/v1.3.3#getting-started) and setup plugin.  
 you can skip controls mapping for default(Dynamic) leaderboard if you will not use it.
 
 #### leaderboard rotation
