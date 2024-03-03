@@ -2,8 +2,6 @@
  * gaps overlay
  */
 
-// var textFont = "Bahnschrift"
-// var textFont = "Sui Generis Free";
 var textFont = "RussellSquare";
 var fontSize = 22;
 var leaderBoardName = "gaps";
@@ -157,6 +155,7 @@ function driver_RelativeLapNr(position) {
  * @param {number} sectorNr sector number
  * @returns time in seconds
  */
+
 function driver_LastLapSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Last.S" + sectorNr);
 }
@@ -166,6 +165,7 @@ function driver_LastLapSectorTime(position, sectorNr) {
  * @param {number} sectorNr sector number
  * @returns delta in seconds
  */
+
 function driver_LastLapSectorDelta(position, sectorNr) {
   const _driverLastLapSector = driver_LastLapSectorTime(position, sectorNr);
   const _focusedLastLapSector = driver_LastLapSectorTime(
@@ -183,12 +183,14 @@ function driver_LastLapSectorDelta(position, sectorNr) {
  * @param {number} sectorNr sector number to compare
  * @returns time in seconds
  */
+
 function driver_BestLapSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "Laps.Best.S" + sectorNr);
 }
 function driver_BestSectorTime(position, sectorNr) {
   return DynLeaderboardsPluginProp(leaderBoardName, position, "BestS" + sectorNr);
 }
+
 /**
  * calculate driver best sector time delta to focused
  * @param {number} position driver position in leader board
@@ -206,6 +208,7 @@ function driver_BestLapSectorDelta(position, sectorNr) {
   }
   return Math.min(Math.max(_focusedBestLapSector - _driverBestLapSector, -99.9), 99.9);
 }
+
 /**
  *
  * @param {number} position driver position in leader board
@@ -217,6 +220,7 @@ function driver_LastSectorIsPB(position, sectorNr) {
   var _last = driver_LastLapSectorTime(position, sectorNr);
   return _last === _PB ? true : false;
 }
+
 /**
  *
  * @param {string} leaderBoard leader board name
@@ -224,15 +228,9 @@ function driver_LastSectorIsPB(position, sectorNr) {
  * @param {string} prop prop to read
  * @returns
  */
+
 function DynLeaderboardsPluginProp(leaderBoard, position, prop) {
   return $prop("DynLeaderboardsPlugin." + leaderBoard + "." + position + "." + prop);
-}
-/**
- * @param {number} interval update rate in seconds
- * @returns number of renders to skip
- */
-function updateRate(interval) {
-  return Math.round($prop("DataCorePlugin.DataUpdateFps") * interval);
 }
 
 function secToTimeStr(sec) {
