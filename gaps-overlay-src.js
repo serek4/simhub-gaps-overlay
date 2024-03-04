@@ -315,5 +315,8 @@ function leaderboardType() {
   if (/(Partial)?RelativeClass/.test(_currentLeaderboard)) {
     return "Class";
   }
+  if (/(Partial)?RelativeCup/.test(_currentLeaderboard)) {
+    return "Cup";
+  }
   return "Overall";
 }

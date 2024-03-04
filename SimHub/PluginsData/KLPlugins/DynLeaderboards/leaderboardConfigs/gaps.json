@@ -1,27 +1,32 @@
 {
-  "OutCarProps": 31693,
+  "OutCarProps": 64461,
   "OutPitProps": 1,
   "OutPosProps": 16,
   "OutGapProps": 1048584,
   "OutStintProps": 0,
   "OutDriverProps": 64,
   "OutLapProps": 47245297726,
-  "Version": 1,
+  "Version": 2,
   "Name": "gaps",
   "NumOverallPos": 7,
   "NumClassPos": 7,
+  "NumCupPos": 7,
   "NumOnTrackRelativePos": 3,
   "NumOverallRelativePos": 3,
   "NumClassRelativePos": 3,
+  "NumCupRelativePos": 3,
   "NumDrivers": 1,
   "PartialRelativeOverallNumOverallPos": 2,
   "PartialRelativeOverallNumRelativePos": 2,
   "PartialRelativeClassNumClassPos": 2,
   "PartialRelativeClassNumRelativePos": 2,
+  "PartialRelativeCupNumCupPos": 2,
+  "PartialRelativeCupNumRelativePos": 2,
   "Order": [
     8,
     3,
     6
   ],
-  "CurrentLeaderboardIdx": 0
+  "CurrentLeaderboardIdx": 0,
+  "IsEnabled": true
 }
