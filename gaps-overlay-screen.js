@@ -36,14 +36,15 @@ function positionBoxBackground(LBposition) {
 function positionBoxTextColor(LBposition) {
   const _carClass = DynLeaderboardsPluginProp(leaderBoardName, LBposition, "Car.Class");
   switch (_carClass) {
-    case "ST15":
+    case "GT2":
     case "CUP17":
+    case "ST15":
       return "Black";
     case "GT3":
     case "GT4":
-    case "CHL":
     case "CUP21":
     case "ST21":
+    case "CHL":
     case "TCX":
       return "White";
 
